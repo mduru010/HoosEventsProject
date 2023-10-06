@@ -84,8 +84,19 @@ WSGI_APPLICATION = 'asdproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'd9q09kaj5rpu3n',
+
+        'USER': 'rprdorlisexrml',
+
+        'PASSWORD': '08ee026360e7242b4245f3fbe6c2be8a999f13a6086a9bc192812fbb81c6f29a',
+
+        'HOST': 'ec2-44-206-204-65.compute-1.amazonaws.com',
+
+        'PORT': '5432',
+
     }
 }
 
