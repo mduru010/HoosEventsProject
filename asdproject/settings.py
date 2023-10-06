@@ -61,7 +61,7 @@ ROOT_URLCONF = 'asdproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'hoo_event/templates'],
+        'DIRS': [BASE_DIR / 'hoo_event/templates/hoo_event'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
