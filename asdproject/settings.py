@@ -151,7 +151,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SITE_ID = 5
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/redirect'
 LOGOUT_REDIRECT_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
