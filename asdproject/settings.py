@@ -10,6 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+# /***************************************************************************************
+# *  REFERENCES
+# *  Title: User Registration in Django using Google OAuth
+# *  Author: Geoffrey Mungai
+# *  Date: December 18, 2020 
+# *  URL: https://www.section.io/engineering-education/django-google-oauth/
+# *  Software License: Blog Article
+# *
+# ***************************************************************************************/
+
 from pathlib import Path
 import os
 
@@ -148,6 +158,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
 
 SITE_ID = 5
 
