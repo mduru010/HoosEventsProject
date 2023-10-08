@@ -1,3 +1,14 @@
+# /***************************************************************************************
+# *  REFERENCES
+# *  Title: Using the Django authentication system
+# *  Author: Django Documentation
+# *  Date: October 7th, 2023
+# *  Version: 4.2
+# *  URL: https://docs.djangoproject.com/en/4.2/topics/auth/default/
+# *
+# ***************************************************************************************/
+
+
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
