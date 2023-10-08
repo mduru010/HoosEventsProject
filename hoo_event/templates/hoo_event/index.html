@@ -3,7 +3,7 @@
 <body>
 <h1>Hoo Events</h1>
 {% if user.is_authenticated %}
-  <p>Welcome, You are logged in as {{ user.username }} {{ user.email }}</p>
+  <p>Welcome {{ user.username }}, You are logged in as {{ user.email }}!</p>
   <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit">Logout</button>
