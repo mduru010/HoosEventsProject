@@ -1,17 +1,37 @@
 {% load socialaccount %}
 <html>
 <body>
-    <div class="google-id-authentication-block">
-      <h1>My Google OAuth Project </h1>
-      {% if user.is_authenticated and user.email == "durumichael010@gmail.com" or user.email == "danielhuynh523@gmail.com" %}
-      <p>Welcome admin, You are logged in as {{ user.username }}. This is a message ONLY for administrators.</p>
+<h1>Hoo Events</h1>
+{% if user.is_authenticated and user.email == "durumichael010@gmail.com" or user.email == "danielhuynh523@gmail.com" %}
+<p>Welcome admin, You are logged in as {{ user.username }}. This is a message ONLY for administrators.</p>
 
-      {% elif user.is_authenticated and user.email != "durumichael010@gmail.com" %}
-      <p>Welcome user, You are logged in as {{ user.username }}. This is a message ONLL for users.</p>
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
 
-      {% else %}
-      <a href="{% provider_login_url 'google' %}">Login With Google</a>
-      {% endif %}
-    </div>
+{% elif user.is_authenticated and user.email != "durumichael010@gmail.com" %}
+  <p>Welcome user, You are logged in as {{ user.username }}. This is a message ONLL for users.</p>
+
+  <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+
+{% else %}
+  <a href="{% provider_login_url "google" action="reauthenticate" %}">Login With Google</a>
+{% endif %}
 </body>
 </html>
+
+<!-- <div class="google-id-authentication-block">
+  <h1>My Google OAuth Project </h1>
+  {% if user.is_authenticated and user.email == "durumichael010@gmail.com" or user.email == "danielhuynh523@gmail.com" %}
+  <p>Welcome admin, You are logged in as {{ user.username }}. This is a message ONLY for administrators.</p>
+
+  {% elif user.is_authenticated and user.email != "durumichael010@gmail.com" %}
+  <p>Welcome user, You are logged in as {{ user.username }}. This is a message ONLL for users.</p>
+
+  {% else %}
+  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+  {% endif %}
+</div> -->
