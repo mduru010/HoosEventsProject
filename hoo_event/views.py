@@ -16,6 +16,12 @@
 
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+import json
+from django.conf import settings
+from .models import EventForm, Event
+import requests
+from django.http import HttpResponseRedirect
+import googlemaps
 
 @login_required
 def main(request):
@@ -26,3 +32,55 @@ def main(request):
     elif request.user.groups.filter(name='regular_users').exists() or (request.user.email == "cs3240.student@gmail.com"):
         return redirect('index')
     return redirect('index') # delete once we properly define all users that sign up as regular users
+
+def addEvent(request):
+    form = EventForm()
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            
+            event_title = form.cleaned_data['event_title']
+            event_street_address = form.cleaned_data['event_street_address']
+            event_city = form.cleaned_data['event_city']
+            event_state = form.cleaned_data['event_state']
+            event_time_start = form.cleaned_data['event_time_start']
+            event_time_end = form.cleaned_data['event_time_end']
+            event_description = form.cleaned_data['event_description']
+            
+            new_event = Event.objects.create(
+                event_title = event_title,
+                event_street_address = event_street_address,
+                event_city = event_city,
+                event_state = event_state,
+                event_time_start = event_time_start,
+                event_time_end = event_time_end,
+                event_description = event_description
+            )
+
+            # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+
+            url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
+            street_address_split = event_street_address.split(' ')
+            street_address = ''
+            for word in street_address_split:
+                street_address += word + '+'
+
+            city_split = event_city.split(' ')
+            city = ''
+            for word in city_split:
+                city += word + '+'
+
+            state_split = event_state.split(' ')
+            state = ''
+            for word in state_split:
+                state += word + '+'
+
+            address = street_address + "," + city + "," + state
+            url += 'address=' + address + '&key=' + settings.GOOGLE_API_KEY
+
+            response = requests.get(url)
+
+            new_event.save()
+            form.save()
+            return HttpResponseRedirect(reversed('index'))
