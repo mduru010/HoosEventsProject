@@ -1,0 +1,55 @@
+body {
+  background-image: url("https://images.saymedia-content.com/.image/t_share/MTkzOTUzODU0MDkyODc5MzY1/particlesjs-examples.gif");
+  background-size: cover;
+  overflow: hidden; /* Hide scrollbars */
+}
+
+#body-div {
+    padding-top: 300px;
+    /* background-color: black; */
+}
+
+#hoos-events-landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: red; */
+}
+
+#hoos-events-landing-page div {
+    background-color: black;
+    padding: 15px;
+    border-style: solid;
+    border-radius:30px;
+    animation: fadeIn 2s;
+}
+
+h1 {
+    font-size: 60px;
+    font-family: "Montserrat";
+    font-weight: bolder;
+    color: white;
+    text-align: center;
+    animation: fadeIn 2s;
+}
+
+h2 {
+    font-family: "Montserrat";
+    font-weight: 300;
+    color: white;
+    text-align: center;
+    animation: fadeIn 2s;
+}
+
+#google-login-link {
+    color: white;
+    text-decoration: none;
+    font-family: "Montserrat";
+    font-weight: bolder;
+    animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
