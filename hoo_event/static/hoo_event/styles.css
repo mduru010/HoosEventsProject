@@ -21,14 +21,16 @@ body {
     padding: 15px;
     border-style: solid;
     border-radius:30px;
-
+    animation: fadeIn 2s;
 }
 
 h1 {
+    font-size: 60px;
     font-family: "Montserrat";
     font-weight: bolder;
     color: white;
     text-align: center;
+    animation: fadeIn 2s;
 }
 
 h2 {
@@ -36,6 +38,7 @@ h2 {
     font-weight: 300;
     color: white;
     text-align: center;
+    animation: fadeIn 2s;
 }
 
 #google-login-link {
@@ -43,4 +46,10 @@ h2 {
     text-decoration: none;
     font-family: "Montserrat";
     font-weight: bolder;
+    animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
