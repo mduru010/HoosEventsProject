@@ -19,7 +19,7 @@ class EventForm(forms.Form):
     event_time_end = models.DateTimeField()
     event_description = models.TextField()
 
-class Event(models.model):
+class Event(models.Model):
     event_title = models.CharField(max_length=100)
     event_longitude = models.DecimalField(max_digits=9, decimal_places=6)
     event_latitude = models.DecimalField(max_digits=9, decimal_places=6)
