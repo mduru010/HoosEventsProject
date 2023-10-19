@@ -19,10 +19,12 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 import hoo_event.views as views
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+    path('', lambda request: redirect('hoo_event/', permanent=True)),
+    path('hoo_event/', include('hoo_event.urls')),
     path('admin_events/', TemplateView.as_view(template_name="admin_event.html"), name="admin_event"),
     path('accounts/', include('allauth.urls')),
     path('logout/', LogoutView.as_view(), name="logout"),
