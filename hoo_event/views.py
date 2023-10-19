@@ -23,6 +23,7 @@ import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
+from django.utils import timezone
 # import googlemaps
 
 @login_required
@@ -48,24 +49,15 @@ def addEvent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
-            
+            print(form.cleaned_data)
             event_title = form.cleaned_data['event_title']
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
             event_state = form.cleaned_data['event_state']
-            event_time_start = form.cleaned_data['event_time_start']
-            event_time_end = form.cleaned_data['event_time_end']
-            event_description = form.cleaned_data['event_description']
-            
-            new_event = Event.objects.create(
-                event_title = event_title,
-                event_street_address = event_street_address,
-                event_city = event_city,
-                event_state = event_state,
-                event_time_start = event_time_start,
-                event_time_end = event_time_end,
-                event_description = event_description
-            )
+            # event_time_start = form.cleaned_data['event_time_start']
+            # event_time_end = form.cleaned_data['event_time_end']
+            # event_description = form.cleaned_data['event_description']
+
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -94,11 +86,23 @@ def addEvent(request):
             lat = data['results'][0]['geometry']['location']['lat']
             lng = data['results'][0]['geometry']['location']['lng']
 
-            new_event.event_latitude = lat
-            new_event.event_longitude = lng
+            new_event = Event.objects.create(
+                event_title=event_title,
+                event_latitude = lat,
+                event_longitude = lng,
+                event_street_address=event_street_address,
+                event_city=event_city,
+                event_state=event_state,
+                # event_time_start = event_time_start,
+                # event_time_end = event_time_end,
+                # event_description = event_description
+            )
+            print(lat, lng)
 
             new_event.save()
-            return HttpResponseRedirect(reversed('index'))
+            return HttpResponseRedirect(reverse('hoo_event:index'))
+        else:
+            print(form.errors)
 
     return render(request, "hoo_event/create_event.html", {"form": form})
 

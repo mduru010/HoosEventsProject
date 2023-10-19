@@ -1,5 +1,6 @@
 from django.db import models
 from django import forms
+from django.utils import timezone
 
 # Create your models here.
 from django.contrib.auth.models import Group, Permission
@@ -11,13 +12,13 @@ admin_users, created = Group.objects.get_or_create(name ='admin_users')
 
 # Create your models here.
 class EventForm(forms.Form):
-    event_title = models.CharField(max_length=100)
-    event_street_address = models.CharField(max_length=100)
-    event_city = models.CharField(max_length=100)
-    event_state = models.CharField(max_length=100)
-    event_time_start = models.DateTimeField()
-    event_time_end = models.DateTimeField()
-    event_description = models.TextField()
+    event_title = forms.CharField(max_length=100)
+    event_street_address = forms.CharField(max_length=100)
+    event_city = forms.CharField(max_length=100)
+    event_state = forms.CharField(max_length=100)
+    # event_time_start = timezone.now()
+    # event_time_end = timezone.now()
+    # event_description = forms.CharField(widget=forms.Textarea)
 
 class Event(models.Model):
     event_title = models.CharField(max_length=100)
@@ -26,6 +27,6 @@ class Event(models.Model):
     event_street_address = models.CharField(max_length=100)
     event_city = models.CharField(max_length=100)
     event_state = models.CharField(max_length=100)
-    event_time_start = models.DateTimeField()
-    event_time_end = models.DateTimeField()
-    event_description = models.TextField()
+    # event_time_start = models.DateTimeField()
+    # event_time_end = models.DateTimeField()
+    # event_description = models.TextField()
