@@ -1,6 +1,9 @@
-<form action="{% url 'addNewEvent' %}" method="post">
+<form action="{% url 'hoo_event:addNewEvent' %}" method="post">
 
     {% csrf_token %}
+
+    <label>What is this event called?</label><br> <!-- User enters the address-->
+    <input type="text" name="event_title" value="Hoos Hack"><br>
 
     <label>Enter The Street Address:</label><br> <!-- User enters the address-->
     <input type="text" name="event_street_address" value="101 Fake Place Dr."><br>
