@@ -22,6 +22,7 @@ from .models import EventForm, Event
 import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
+from django.urls import reverse
 # import googlemaps
 
 @login_required
@@ -40,7 +41,7 @@ def main(request):
     elif request.user.groups.filter(name='admin_users').exists():
         return redirect('admin_event')
     elif request.user.groups.filter(name='regular_users').exists():
-        return redirect('index')
+        return redirect(reverse('hoo_event:index'))
 
 def addEvent(request):
     form = EventForm()
