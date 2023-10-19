@@ -41,8 +41,6 @@ def main(request):
         return redirect('admin_event')
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect('index')
-    # return redirect('index') # delete once we properly define all users that sign up as regular users
-    return redirect('index')
 
 def addEvent(request):
     form = EventForm()
