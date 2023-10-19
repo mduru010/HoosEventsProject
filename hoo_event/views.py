@@ -29,16 +29,16 @@ def main(request):
     regular_users = Group.objects.get(name='regular_users')
     admin_users = Group.objects.get(name='admin_users')
     if request.user.email == "cs3240.student@gmail.com":
-        request.user.groups.add(regular_users)
+        regular_users.user_set.add(request.user)
     elif request.user.email == "cs3240.super@gmail.com":
-        request.user.groups.add(admin_users)
+        admin_users.user_set.add(request.user)
     if not request.user.groups.filter(name='admin_users').exists():
-        request.user.groups.add(regular_users)
+        regular_users.user_set.add(request.user)
 
-    if request.user.groups.filter(name='admin_users').exists():
-        return redirect('admin_event')
-    elif request.user.is_staff:
+    if request.user.is_staff:
         return redirect('admin:index')
+    elif request.user.groups.filter(name='admin_users').exists():
+        return redirect('admin_event')
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect('index')
     # return redirect('index') # delete once we properly define all users that sign up as regular users
