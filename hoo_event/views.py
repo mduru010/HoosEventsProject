@@ -14,7 +14,7 @@
 # ***************************************************************************************/
 
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
@@ -100,3 +100,7 @@ def addEvent(request):
 
             new_event.save()
             return HttpResponseRedirect(reversed('index'))
+
+def event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    return render(request, 'event.html', {'event': event})

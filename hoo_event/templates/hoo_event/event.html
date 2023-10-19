@@ -6,8 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBBWV6Nih80bhNyDurMBgAv9wk5Dsl7k"></script>
   </head>
   <body>
     <img src="https://media.npr.org/assets/img/2023/01/14/this-is-fine_custom-dcb93e90c4e1548ffb16978a5a8d182270c872a9-s1100-c50.jpg" alt="Italian Trulli">
+    <h1>{{event.event_title}}</h1>
+    <div id="map" style="height: 400px; width: 75%;"></div>
+    <script>
+      function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: parseFloat('{{ event.latitude }}'), lng: parseFloat('{{ event.longitude }}')},
+                zoom: 15
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: parseFloat('{{ event.latitude }}'), lng: parseFloat('{{ event.longitude }}')},
+                map: map,
+                title: '{{ event.name }}',
+            });
+        }
+    </script>
   </body>
 </html>
