@@ -19,8 +19,10 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def main(request):
-    if request.user.groups.filter(name='admin_users').exists():
+    if request.user.groups.filter(name='admin_users').exists() or (request.user.email == "pointlssus1@gmail.com") or (request.user.email == "cs3240.super@gmail.com"):
         return redirect('admin_event')
     elif request.user.is_staff:
         return redirect('admin:index')
-    return redirect('index')
+    elif request.user.groups.filter(name='regular_users').exists() or (request.user.email == "cs3240.student@gmail.com"):
+        return redirect('index')
+    return redirect('index') # delete once we properly define all users that sign up as regular users
