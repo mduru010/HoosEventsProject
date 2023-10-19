@@ -1,0 +1,24 @@
+body {
+  background-image: url("https://images.saymedia-content.com/.image/t_share/MTkzOTUzODU0MDkyODc5MzY1/particlesjs-examples.gif");
+  background-size: cover;
+}
+
+h1 {
+    font-family: "Montserrat";
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+#log-in-with-google-link {
+    text-align: center;
+    /* border-radius: 2px;
+    border-style: solid;
+    border-color: black; */
+}
+
+#hoos-events-sign-in-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

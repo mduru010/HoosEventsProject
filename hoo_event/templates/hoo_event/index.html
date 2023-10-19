@@ -6,9 +6,15 @@
 *  URL: https://stackoverflow.com/questions/74228840/django-allauth-and-logout-issue-with-google
 *
 ***************************************************************************************/ -->
-
+{% load static %}
 {% load socialaccount %}
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'hoo_event/styles.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
+  </head>
 <body>
 <h1>Hoo Events</h1>
 {% if user.is_authenticated %}
@@ -18,7 +24,9 @@
     <button type="submit">Logout</button>
   </form>
 {% else %}
+  <div id="log-in-with-google-link">
   <a href="{% provider_login_url "google" action="reauthenticate" %}">Login With Google</a>
+  </div>
 {% endif %}
 </body>
 </html>
