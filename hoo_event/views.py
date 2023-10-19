@@ -20,7 +20,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def main(request):
     if request.user.groups.filter(name='admin_users').exists():
-        return render(request, 'admin_event.html')
+        return redirect('admin_event')
     elif request.user.is_staff:
         return redirect('admin:index')
-    return render(request, 'index.html')
+    return redirect('index')

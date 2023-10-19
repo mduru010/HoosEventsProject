@@ -22,7 +22,8 @@ import hoo_event.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name="index.html")),
+    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+    path('admin_events/', TemplateView.as_view(template_name="index.html"), name="admin_event"),
     path('accounts/', include('allauth.urls')),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('redirect/', views.main),
