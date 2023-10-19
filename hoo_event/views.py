@@ -80,7 +80,12 @@ def addEvent(request):
             url += 'address=' + address + '&key=' + settings.GOOGLE_API_KEY
 
             response = requests.get(url)
+            data = response.json()
+            lat = data['results'][0]['geometry']['location']['lat']
+            lng = data['results'][0]['geometry']['location']['lng']
+
+            new_event.event_latitude = lat
+            new_event.event_longitude = lng
 
             new_event.save()
-            form.save()
             return HttpResponseRedirect(reversed('index'))
