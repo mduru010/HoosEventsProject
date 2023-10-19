@@ -142,7 +142,7 @@ USE_I18N = True
 USE_TZ = True
 
 GOOGLE_API_KEY = 'AIzaSyBnBBWV6Nih80bhNyDurMBgAv9wk5Dsl7k'
-
+SOCIALACCOUNT_LOGIN_ON_GET=True
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
