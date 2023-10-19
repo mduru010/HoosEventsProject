@@ -29,5 +29,4 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('redirect/', views.main),
-    path('add/', views.addEvent, name="addNewEvent")
 ]

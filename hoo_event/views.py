@@ -99,6 +99,8 @@ def addEvent(request):
             new_event.save()
             return HttpResponseRedirect(reversed('index'))
 
+    return render(request, "hoo_event/create_event.html", {"form": form})
+
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'event.html', {'event': event})
