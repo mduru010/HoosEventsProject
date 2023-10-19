@@ -1,24 +1,46 @@
 body {
   background-image: url("https://images.saymedia-content.com/.image/t_share/MTkzOTUzODU0MDkyODc5MzY1/particlesjs-examples.gif");
   background-size: cover;
+  overflow: hidden; /* Hide scrollbars */
+}
+
+#body-div {
+    padding-top: 300px;
+    /* background-color: black; */
+}
+
+#hoos-events-landing-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: red; */
+}
+
+#hoos-events-landing-page div {
+    background-color: black;
+    padding: 15px;
+    border-style: solid;
+    border-radius:30px;
+
 }
 
 h1 {
     font-family: "Montserrat";
-    font-weight: bold;
+    font-weight: bolder;
     color: white;
     text-align: center;
 }
 
-#log-in-with-google-link {
+h2 {
+    font-family: "Montserrat";
+    font-weight: 300;
+    color: white;
     text-align: center;
-    /* border-radius: 2px;
-    border-style: solid;
-    border-color: black; */
 }
 
-#hoos-events-sign-in-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#google-login-link {
+    color: white;
+    text-decoration: none;
+    font-family: "Montserrat";
+    font-weight: bolder;
 }
