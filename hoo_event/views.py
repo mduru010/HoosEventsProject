@@ -21,7 +21,7 @@ from django.conf import settings
 from .models import EventForm, Event
 import requests
 from django.http import HttpResponseRedirect
-import googlemaps
+# import googlemaps
 
 @login_required
 def main(request):
