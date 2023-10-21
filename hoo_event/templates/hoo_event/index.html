@@ -17,8 +17,7 @@
   </head>
 <body>
   <div id="body-div">
-  <h1>Welcome to Hoo Events!</h1>
-  <!-- <h2>Let's Get You Signed In.</h2> -->
+  <h1>Welcome to Hoo Events, {{ user.username }}!</h1>
   <section id="hoos-events-landing-page">
     <div>
 {% if user.is_authenticated %}
@@ -33,10 +32,12 @@
 {% endif %}
 </div>
   </section>
-</div>
-<div style="text-align: center;">
-    <h1>You can create a new event here:</h1><br>
-    <a href="{% url 'hoo_event:addNewEvent' %}">Create a New Event</a>
-</div>
+  </div>
+{% if user.is_authenticated %}
+    <div style="text-align: center;">
+        <h1>You can create a new event here:</h1><br>
+        <a href="{% url 'hoo_event:addNewEvent' %}">Create a New Event</a>
+    </div>
+{% endif %}
 </body>
 </html>
