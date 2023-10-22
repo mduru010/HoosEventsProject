@@ -63,9 +63,11 @@ class EventModelTest(unittest.TestCase):
         response = self.client.get(reverse('addNewEvent'))
         self.assertEqual(response.status_code, 200)
 
+
     def test_add_event_view_redirects_to_login_for_anonymous_user(self):
         response = self.client.get(reverse('addNewEvent'))
         self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
+
 
     def test_event_detail_view(self):
         event = Event.objects.create(
