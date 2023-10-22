@@ -45,12 +45,15 @@ class EventModelTest(unittest.TestCase):
         self.assertEqual(str(event), self.event_data['event_title'])
 
 ##################
+    def tearDown(self):
+        # Clean up the database
+        self.user.delete()
     def setUp(self):
-        # Create a test user
+        # Create a test user with a unique username
         self.user = User.objects.create_user(
-            username="unique_testuser",
+            username=f"unique_testuser_{int(time.time())}",  # Append a timestamp
             password="testpassword",
-)
+    )
 
     def test_add_event_view_accessible_by_logged_in_user(self):
         self.client.login(username="testuser", password="testpassword")
