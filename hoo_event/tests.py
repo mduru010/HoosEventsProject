@@ -48,9 +48,9 @@ class EventModelTest(unittest.TestCase):
     def setUp(self):
         # Create a test user
         self.user = User.objects.create_user(
-            username="testuser",
+            username="unique_testuser",
             password="testpassword",
-        )
+)
 
     def test_add_event_view_accessible_by_logged_in_user(self):
         self.client.login(username="testuser", password="testpassword")
