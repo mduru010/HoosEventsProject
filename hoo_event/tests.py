@@ -1,45 +1,58 @@
-# from django.test import TestCase
-# from django.urls import reverse
-# from .models import Event, EventForm
-# from django.contrib.auth.models import User, Group
-#
-# class EventModelTest(TestCase):
-#     def test_create_event(self):
-#         event_data = {
-#             'event_title': "Test Event",
-#             'event_latitude': 40.7128,
-#             'event_longitude': -74.0060,
-#             'event_street_address': "123 Main St",
-#             'event_city': "New York",
-#             'event_state': "NY",
-#         }
-#
-#         # Create a test event
-#         event = Event.objects.create(**event_data)
-#
-#         # Check if the event was created successfully
-#         self.assertEqual(event.event_title, event_data['event_title'])
-#         self.assertEqual(event.event_latitude, event_data['event_latitude'])
-#         self.assertEqual(event.event_longitude, event_data['event_longitude'])
-#         self.assertEqual(event.event_street_address, event_data['event_street_address'])
-#         self.assertEqual(event.event_city, event_data['event_city'])
-#         self.assertEqual(event.event_state, event_data['event_state'])
-#
-#     def test_event_model_string_representation(self):
-#         event_data = {
-#             'event_title': "Test Event",
-#             'event_latitude': 40.7128,
-#             'event_longitude': -74.0060,
-#             'event_street_address': "123 Main St",
-#             'event_city': "New York",
-#             'event_state': "NY",
-#         }
-#
-#         event = Event.objects.create(**event_data)
-#
-#         # Check if the string representation of the event is as expected
-#         self.assertEqual(str(event), event_data['event_title'])
-#
+from django.test import TestCase
+import unittest
+from django.urls import reverse
+from .models import Event, EventForm
+from django.contrib.auth.models import User, Group
+
+class EventModelTest(unittest.TestCase):
+
+    event_data = {
+        'event_title': "Test Event",
+        'event_latitude': 40.7128,
+        'event_longitude': -74.0060,
+        'event_street_address': "123 Main St",
+        'event_city': "New York",
+        'event_state': "NY",
+    }
+    def test_create_event(self):
+        # Create a test event
+        event = Event()
+        event.event_title = "Test Event"
+        event.event_latitude = 40.7128
+        event.event_longitude = -74.0060
+        event.event_street_address = "123 Main St"
+        event.event_city = "New York"
+        event.event_state = "NY"
+
+        # event = Event.objects.create(**event_data)
+        # event_data = {
+        #     'event_title': "Test Event",
+        #     'event_latitude': 40.7128,
+        #     'event_longitude': -74.0060,
+        #     'event_street_address': "123 Main St",
+        #     'event_city': "New York",
+        #     'event_state': "NY",
+        # }
+
+        # Check if the event was created successfully
+        self.assertEqual(event.event_title, self.event_data['event_title'])
+        self.assertEqual(event.event_latitude, self.event_data['event_latitude'])
+        self.assertEqual(event.event_longitude, self.event_data['event_longitude'])
+        self.assertEqual(event.event_street_address, self.event_data['event_street_address'])
+        self.assertEqual(event.event_city, self.event_data['event_city'])
+        self.assertEqual(event.event_state, self.event_data['event_state'])
+
+    def test_event_model_string_representation(self):
+        event = Event()
+        event.event_title = "Test Event"
+        event.event_latitude = 40.7128
+        event.event_longitude = -74.0060
+        event.event_street_address = "123 Main St"
+        event.event_city = "New York"
+        event.event_state = "NY"
+        # Check if the string representation of the event is as expected
+        self.assertEqual(str(event), self.event_data['event_title'])
+
 # class AddEventViewTest(TestCase):
 #     def setUp(self):
 #         # Create a regular user
