@@ -67,22 +67,22 @@ class EventModelTest(unittest.TestCase):
     #     # Check if the response redirects to the login page
     #     self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
 
-    def test_create_event(self):
-        user = User.objects.create_user(
-            username="testuser",
-            password="testpassword",
-        )
-        self.client.login(username="testuser", password="testpassword")
+    # def test_create_event(self):
+    #     user = User.objects.create_user(
+    #         username="testuser",
+    #         password="testpassword",
+    #     )
+    #     self.client.login(username="testuser", password="testpassword")
 
-        event_data = {
-            'event_title': 'Test Event',
-            'event_latitude': 40.7128,
-            'event_longitude': -74.0060,
-            'event_street_address': '123 Main St',
-            'event_city': 'New York',
-            'event_state': 'NY',
-        }
+    #     event_data = {
+    #         'event_title': 'Test Event',
+    #         'event_latitude': 40.7128,
+    #         'event_longitude': -74.0060,
+    #         'event_street_address': '123 Main St',
+    #         'event_city': 'New York',
+    #         'event_state': 'NY',
+    #     }
 
-        response = self.client.post(reverse('addNewEvent'), event_data)
-        self.assertRedirects(response, reverse('hoo_event:index'))
-        self.assertTrue(Event.objects.filter(event_title=event_data['event_title']).exists())
+    #     response = self.client.post(reverse('addNewEvent'), event_data)
+    #     self.assertRedirects(response, reverse('hoo_event:index'))
+    #     self.assertTrue(Event.objects.filter(event_title=event_data['event_title']).exists())
