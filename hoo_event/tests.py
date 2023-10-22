@@ -83,7 +83,7 @@ class EventModelTest(unittest.TestCase):
         client = Client()
         response = client.get(reverse('hoo_event:event', args=[event.id]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Event")
+        self.assertTrue("Test Event" in response.content.decode())
 
     def test_recent_events_view(self):
         client = Client()
