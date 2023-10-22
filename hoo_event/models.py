@@ -27,6 +27,9 @@ class Event(models.Model):
     event_street_address = models.CharField(max_length=100)
     event_city = models.CharField(max_length=100)
     event_state = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.event_title
     # event_time_start = models.DateTimeField()
     # event_time_end = models.DateTimeField()
     # event_description = models.TextField()
