@@ -1,9 +1,9 @@
-from django.test import TestCase
 import unittest
 from django.urls import reverse
 from .models import Event, EventForm
 from django.contrib.auth.models import User, Group
 from .views import addEvent
+from django.test import Client, TestCase
 import time
 
 class EventModelTest(unittest.TestCase):
