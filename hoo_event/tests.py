@@ -81,5 +81,5 @@ class EventModelTest(unittest.TestCase):
         self.assertContains(response, "Test Event")
 
     def test_recent_events_view(self):
-        response = self.client.get(reverse('recent_events'))
+        response = self.client.get(reverse('recent'))
         self.assertEqual(response.status_code, 200)
