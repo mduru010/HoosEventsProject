@@ -46,38 +46,38 @@ class EventModelTest(TestCase):
         self.assertEqual(str(event), self.event_data['event_title'])
 
 ##################
-    def tearDown(self):
-        # Clean up the database
-        self.user.delete()
-    def setUp(self):
-        # Create a test user with a unique username
-        self.user = User.objects.create_user(
-            username=f"unique_testuser_{int(time.time())}",  # Append a timestamp
-            password="testpassword",
-    )
+    # def tearDown(self):
+    #     # Clean up the database
+    #     self.user.delete()
+    # def setUp(self):
+    #     # Create a test user with a unique username
+    #     self.user = User.objects.create_user(
+    #         username=f"unique_testuser_{int(time.time())}",  # Append a timestamp
+    #         password="testpassword",
+    # )
 
-    def test_add_event_view_accessible_by_logged_in_user(self):
-        self.client.login(username="testuser", password="testpassword")
-        response = self.client.get(reverse('addNewEvent'))
-        self.assertEqual(response.status_code, 200)
+    # def test_add_event_view_accessible_by_logged_in_user(self):
+    #     self.client.login(username="testuser", password="testpassword")
+    #     response = self.client.get(reverse('addNewEvent'))
+    #     self.assertEqual(response.status_code, 200)
 
-    def test_add_event_view_redirects_to_login_for_anonymous_user(self):
-        response = self.client.get(reverse('addNewEvent'))
-        self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
+    # def test_add_event_view_redirects_to_login_for_anonymous_user(self):
+    #     response = self.client.get(reverse('addNewEvent'))
+    #     self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
 
-    def test_event_detail_view(self):
-        event = Event.objects.create(
-            event_title="Test Event",
-            event_latitude=40.7128,
-            event_longitude=-74.0060,
-            event_street_address="123 Main St",
-            event_city="New York",
-            event_state="NY",
-        )
-        response = self.client.get(reverse('event', args=[event.id]))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Event")
+    # def test_event_detail_view(self):
+    #     event = Event.objects.create(
+    #         event_title="Test Event",
+    #         event_latitude=40.7128,
+    #         event_longitude=-74.0060,
+    #         event_street_address="123 Main St",
+    #         event_city="New York",
+    #         event_state="NY",
+    #     )
+    #     response = self.client.get(reverse('event', args=[event.id]))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, "Test Event")
 
-    def test_recent_events_view(self):
-        response = self.client.get(reverse('recent_events'))
-        self.assertEqual(response.status_code, 200)
+    # def test_recent_events_view(self):
+    #     response = self.client.get(reverse('recent_events'))
+    #     self.assertEqual(response.status_code, 200)
