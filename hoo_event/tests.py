@@ -44,11 +44,15 @@ class EventModelTest(unittest.TestCase):
         # Check if the string representation of the event is as expected
         self.assertEqual(str(event), self.event_data['event_title'])
 
-    def test_add_event_view_accessible_by_logged_in_user(self):
-        user = User.objects.create_user(
+##################
+    def setUp(self):
+        # Create a test user
+        self.user = User.objects.create_user(
             username="testuser",
             password="testpassword",
         )
+
+    def test_add_event_view_accessible_by_logged_in_user(self):
         self.client.login(username="testuser", password="testpassword")
         response = self.client.get(reverse('addNewEvent'))
         self.assertEqual(response.status_code, 200)
@@ -73,4 +77,3 @@ class EventModelTest(unittest.TestCase):
     def test_recent_events_view(self):
         response = self.client.get(reverse('recent_events'))
         self.assertEqual(response.status_code, 200)
-        # Add more assertions based on what you expect to see in the recent events view.
