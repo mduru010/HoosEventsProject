@@ -1,12 +1,12 @@
 from django.test import TestCase
-# import unittest
+import unittest
 from django.urls import reverse
 from .models import Event, EventForm
 from django.contrib.auth.models import User, Group
 from .views import addEvent
 import time
 
-class EventModelTest(TestCase):
+class EventModelTest(unittest.TestCase):
 
     event_data = {
         'event_title': "Test Event",
