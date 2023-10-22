@@ -3,6 +3,7 @@ import unittest
 from django.urls import reverse
 from .models import Event, EventForm
 from django.contrib.auth.models import User, Group
+from .views import addEvent
 
 class EventModelTest(unittest.TestCase):
 
@@ -135,3 +136,58 @@ class EventModelTest(unittest.TestCase):
 #         self.assertContains(response, event_data['event_title'])
 #
 # # Create your tests here.
+
+
+
+class AddEventViewTests(TestCase):
+
+    def test_add_event_view_accessible_by_logged_in_user(self):
+        # Create a regular user
+        user = User.objects.create_user(
+            username="testuser",
+            password="testpassword",
+        )
+
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        # Access the add event view
+        response = self.client.get(reverse('addNewEvent'))
+
+        # Check if the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_event_view_redirects_to_login_for_anonymous_user(self):
+        # Access the add event view without logging in
+        response = self.client.get(reverse('addNewEvent'))
+
+        # Check if the response redirects to the login page
+        self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
+
+    def test_create_event(self):
+        # Create a regular user
+        user = User.objects.create_user(
+            username="testuser",
+            password="testpassword",
+        )
+
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        event_data = {
+            'event_title': 'Test Event',
+            'event_latitude': 40.7128,
+            'event_longitude': -74.0060,
+            'event_street_address': '123 Main St',
+            'event_city': 'New York',
+            'event_state': 'NY',
+        }
+
+        # Create a test event by posting data to the add event view
+        response = self.client.post(reverse('addNewEvent'), event_data)
+
+        # Check if the response redirects to the event list page after creating an event
+        self.assertRedirects(response, reverse('hoo_event:index'))
+
+        # Check if the event was created in the database
+        self.assertTrue(Event.objects.filter(event_title=event_data['event_title']).exists())
