@@ -24,6 +24,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
 from django.utils import timezone
+from django.views import generic
 # import googlemaps
 
 @login_required
@@ -109,3 +110,15 @@ def addEvent(request):
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'event.html', {'event': event})
+
+class ShowRecentView(generic.ListView):
+    template_name = "hoo_event/recent_event.html"
+    context_object_name = "latest_events"
+
+    def get_queryset(self):
+        """
+        Get the most 5 recently added events
+        """
+        all_events = Event.objects.filter()
+        n = len(all_events)
+        return all_events[n - 5: n]
