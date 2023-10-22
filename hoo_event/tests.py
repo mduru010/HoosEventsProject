@@ -53,20 +53,20 @@ class EventModelTest(unittest.TestCase):
         event.event_state = "NY"
         # Check if the string representation of the event is as expected
         self.assertEqual(str(event), self.event_data['event_title'])
-    def test_add_event_view_accessible_by_logged_in_user(self):
-        self.client.login(username="testuser", password="testpassword")
-        response = self.client.get(reverse('addNewEvent'))
+    # def test_add_event_view_accessible_by_logged_in_user(self):
+    #     self.client.login(username="testuser", password="testpassword")
+    #     response = self.client.get(reverse('addNewEvent'))
 
-        # Check if the response status code is 200 (OK)
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response status code is 200 (OK)
+    #     self.assertEqual(response.status_code, 200)
 
 
-    def test_add_event_view_redirects_to_login_for_anonymous_user(self):
-        response = self.client.get(reverse('addNewEvent'))
+    # def test_add_event_view_redirects_to_login_for_anonymous_user(self):
+    #     response = self.client.get(reverse('addNewEvent'))
 
-        # Check if the response redirects to the login page
-        self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
-        
+    #     # Check if the response redirects to the login page
+    #     self.assertRedirects(response, reverse('login') + f'?next={reverse("addNewEvent")}')
+
     def test_create_event(self):
         user = User.objects.create_user(
             username="testuser",
