@@ -11,5 +11,4 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
     path('add/', views.addEvent, name="addNewEvent"),
     path('recent/', views.ShowRecentView.as_view(), name="recent"),
-    path('hoo_event/', include('hoo_event.urls')),
 ]
