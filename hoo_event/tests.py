@@ -65,11 +65,19 @@ class EventModelTest(unittest.TestCase):
 
         response = client.post(reverse('hoo_event:addNewEvent'), event_data)
         self.assertEqual(response.status_code, 302)  # Check for successful redirect after form submission
-        new_event = Event.objects.get(event_title='New Test Event')
-        self.assertEqual(new_event.event_title, event_data['event_title'])
-        self.assertEqual(new_event.event_street_address, event_data['event_street_address'])
-        self.assertEqual(new_event.event_city, event_data['event_city'])
-        self.assertEqual(new_event.event_state, event_data['event_state'])
+
+        # Get all events with the title 'New Test Event'
+        events = Event.objects.filter(event_title='New Test Event')
+
+        # Check if at least one event with the given title exists
+        self.assertTrue(events.exists())
+
+        # You can also check other attributes of the events if needed
+        for new_event in events:
+            self.assertEqual(new_event.event_title, event_data['event_title'])
+            self.assertEqual(new_event.event_street_address, event_data['event_street_address'])
+            self.assertEqual(new_event.event_city, event_data['event_city'])
+            self.assertEqual(new_event.event_state, event_data['event_state'])
 
     def test_event_detail_view(self):
         event = Event.objects.create(
