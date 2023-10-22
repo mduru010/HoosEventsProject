@@ -1,0 +1,13 @@
+<h1>You can check out the most recently added events here!</h1>
+{% if latest_events %}
+
+    {% for event in latest_events %}
+        <li style="margin-bottom: 10px; text-align: center; list-style: none">
+            <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+        </li>
+    {% endfor %}
+
+{% else %}
+    <p style="text-align: center">No events are available.</p>
+{% endif %}
+ <a href="{% url 'hoo_event:index' %}">Go back to main page</a>
