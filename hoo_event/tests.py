@@ -63,7 +63,7 @@ class EventModelTest(unittest.TestCase):
             'event_state': 'CA',
         }
 
-        response = client.post(reverse('addNewEvent'), event_data)
+        response = client.post(reverse('hoo_event:addNewEvent'), event_data)
         self.assertEqual(response.status_code, 302)  # Check for successful redirect after form submission
         new_event = Event.objects.get(event_title='New Test Event')
         self.assertEqual(new_event.event_title, event_data['event_title'])
@@ -81,11 +81,11 @@ class EventModelTest(unittest.TestCase):
             event_state="NY",
         )
         client = Client()
-        response = client.get(reverse('event', args=[event.id]))
+        response = client.get(reverse('hoo_event:event', args=[event.id]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Event")
 
     def test_recent_events_view(self):
         client = Client()
-        response = client.get(reverse('recent'))
+        response = client.get(reverse('hoo_event:recent'))
         self.assertEqual(response.status_code, 200)
