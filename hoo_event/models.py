@@ -16,8 +16,8 @@ class EventForm(forms.Form):
     event_street_address = forms.CharField(max_length=100)
     event_city = forms.CharField(max_length=100)
     event_state = forms.CharField(max_length=100)
-    # event_time_start = timezone.now()
-    # event_time_end = timezone.now()
+    event_start_time = forms.DateTimeField()
+    event_end_time = forms.DateTimeField()
     # event_description = forms.CharField(widget=forms.Textarea)
 
 class Event(models.Model):
@@ -27,9 +27,10 @@ class Event(models.Model):
     event_street_address = models.CharField(max_length=100)
     event_city = models.CharField(max_length=100)
     event_state = models.CharField(max_length=100)
+    event_start_time = models.DateTimeField(default="2000-01-01T00:00")
+    event_end_time = models.DateTimeField(default="2000-01-01T00:00")
 
     def __str__(self):
         return self.event_title
-    # event_time_start = models.DateTimeField()
-    # event_time_end = models.DateTimeField()
+
     # event_description = models.TextField()
