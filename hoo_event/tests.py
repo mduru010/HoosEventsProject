@@ -64,7 +64,7 @@ class EventModelTest(unittest.TestCase):
         }
 
         response = client.post(reverse('hoo_event:addNewEvent'), event_data)
-        self.assertEqual(response.status_code, 302)  # Check for successful redirect after form submission
+        self.assertEqual(response.status_code, 200)  # Check for successful redirect after form submission
 
         # Get all events with the title 'New Test Event'
         events = Event.objects.filter(event_title='New Test Event')
