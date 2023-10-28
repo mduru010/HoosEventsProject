@@ -55,10 +55,11 @@ def addEvent(request):
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
             event_state = form.cleaned_data['event_state']
-            # event_time_start = form.cleaned_data['event_time_start']
-            # event_time_end = form.cleaned_data['event_time_end']
+            event_start_time = form.cleaned_data['event_start_time']
+            event_end_time = form.cleaned_data['event_end_time']
             # event_description = form.cleaned_data['event_description']
-
+            print("start:", event_start_time)
+            print("end:", event_end_time)
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -94,8 +95,8 @@ def addEvent(request):
                 event_street_address=event_street_address,
                 event_city=event_city,
                 event_state=event_state,
-                # event_time_start = event_time_start,
-                # event_time_end = event_time_end,
+                event_start_time = event_start_time,
+                event_end_time = event_end_time,
                 # event_description = event_description
             )
             print(lat, lng)
