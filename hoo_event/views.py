@@ -18,7 +18,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
-from .models import EventForm, Event
+from .models import EventForm, Event, EventStatus
 import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
@@ -97,6 +97,7 @@ def addEvent(request):
                 event_state=event_state,
                 event_start_time = event_start_time,
                 event_end_time = event_end_time,
+                event_status = EventStatus.PENDING,
                 # event_description = event_description
             )
             print(lat, lng)
@@ -120,6 +121,19 @@ class ShowRecentView(generic.ListView):
         """
         Get the most 5 recently added events
         """
-        all_events = Event.objects.filter()
+        all_events = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
         n = len(all_events)
+
+        if n < 5:
+            return all_events
         return all_events[n - 5: n]
+
+class ShowPendingView(generic.ListView):
+    template_name = "hoo_event/pending_event.html"
+    context_object_name = "pending_events"
+
+    def get_queryset(self):
+        """
+        get all pending events so admin can look at each and approve.
+        """
+        return Event.objects.filter(event_status__exact=EventStatus.PENDING)
