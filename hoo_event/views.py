@@ -138,6 +138,16 @@ class ShowPendingView(generic.ListView):
         """
         return Event.objects.filter(event_status__exact=EventStatus.PENDING)
 
+class ShowDeniedView(generic.ListView):
+    template_name = "hoo_event/denied_event.html"
+    context_object_name = "denied_events"
+
+    def get_queryset(self):
+        """
+        get all pending events so admin can look at each and approve.
+        """
+        return Event.objects.filter(event_status__exact=EventStatus.DENIED)
+
 
 def approveEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)

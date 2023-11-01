@@ -11,6 +11,7 @@ urlpatterns = [
     path('add/', views.addEvent, name="addNewEvent"),
     path('recent/', views.ShowRecentView.as_view(), name="recent"),
     path('pending/', views.ShowPendingView.as_view(), name="pending"),
+    path('denied/', views.ShowDeniedView.as_view(), name="denied"),
     path('event/<int:event_id>/approve', views.approveEvent, name="approveEvent"),
     path('event/<int:event_id>/deny', views.denyEvent, name="denyEvent"),
 ]
