@@ -78,6 +78,7 @@ class EventModelTest(unittest.TestCase):
             self.assertEqual(new_event.event_street_address, event_data['event_street_address'])
             self.assertEqual(new_event.event_city, event_data['event_city'])
             self.assertEqual(new_event.event_state, event_data['event_state'])
+            self.assertTrue(new_event.approved)  # Check that the event is approved
 
     def test_event_detail_view(self):
         event = Event.objects.create(
@@ -94,6 +95,17 @@ class EventModelTest(unittest.TestCase):
         self.assertTrue("Test Event" in response.content.decode())
 
     def test_recent_events_view(self):
+        # Create a test event with the approved field set to True
+        event = Event.objects.create(
+            event_title="Test Event",
+            event_latitude=40.7128,
+            event_longitude=-74.0060,
+            event_street_address="123 Main St",
+            event_city="New York",
+            event_state="NY",
+            approved=True,  # Set the approved field to True
+        )
         client = Client()
         response = client.get(reverse('hoo_event:recent'))
         self.assertEqual(response.status_code, 200)
+        self.assertTrue("Test Event" in response.content.decode())
