@@ -35,7 +35,7 @@ class Event(models.Model):
     event_end_time = models.DateTimeField(default="2000-01-01T00:00")
     event_status = models.CharField(default=EventStatus.PENDING)
 
-    approved = models.BooleanField(default=False)
+    # approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.event_title
