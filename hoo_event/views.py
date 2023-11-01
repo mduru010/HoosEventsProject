@@ -137,3 +137,15 @@ class ShowPendingView(generic.ListView):
         get all pending events so admin can look at each and approve.
         """
         return Event.objects.filter(event_status__exact=EventStatus.PENDING)
+
+
+def approveEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    current_event.event_status = EventStatus.APPROVED
+    current_event.save()
+    return HttpResponseRedirect(reverse('hoo_event:index'))
+def denyEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    current_event.event_status = EventStatus.DENIED
+    current_event.save()
+    return HttpResponseRedirect(reverse('hoo_event:index'))
