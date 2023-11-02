@@ -6,6 +6,7 @@ from .views import addEvent
 from django.test import Client, TestCase
 import time
 from datetime import datetime
+from django.utils import timezone
 
 class EventModelTest(unittest.TestCase):
 
@@ -87,6 +88,31 @@ class EventModelTest(unittest.TestCase):
     #         self.assertEqual(new_event.event_state, event_data['event_state'])
     #         self.assertEqual(new_event.event_status, EventStatus.PENDING)  # Check that the event is approved
 
+    # def test_event_creation(self):
+    #     # Test creating an event using the view
+    #     client = Client()
+    #     user = User.objects.create_user(
+    #         username=f"unique_testuser_{int(time.time())}",
+    #         password="testpassword",
+    #     )
+    #     client.login(username=user.username, password="testpassword")
+
+    #     # Define start and end times in a valid format (replace with actual date and time)
+    #     start_time = datetime(2023, 11, 1, 10, 0, 0)
+    #     end_time = datetime(2023, 11, 1, 12, 0, 0)
+
+    #     event_data = {
+    #         'event_title': 'test_event_creation',
+    #         'event_street_address': '456 Elm St',
+    #         'event_city': 'Los Angeles',
+    #         'event_state': 'CA',
+    #         'event_start_time': start_time,  # Use valid date and time
+    #         'event_end_time': end_time,  # Use valid date and time
+    #     }
+
+    #     response = client.post(reverse('hoo_event:addNewEvent'), event_data)
+    #     self.assertEqual(response.status_code, 302)  # Check for a redirect (status code 302)
+
     def test_event_creation(self):
         # Test creating an event using the view
         client = Client()
@@ -97,8 +123,8 @@ class EventModelTest(unittest.TestCase):
         client.login(username=user.username, password="testpassword")
 
         # Define start and end times in a valid format (replace with actual date and time)
-        start_time = datetime(2023, 11, 1, 10, 0, 0)
-        end_time = datetime(2023, 11, 1, 12, 0, 0)
+        start_time = timezone.make_aware(datetime(2023, 11, 1, 10, 0, 0))
+        end_time = timezone.make_aware(datetime(2023, 11, 1, 12, 0, 0))
 
         event_data = {
             'event_title': 'test_event_creation',
@@ -111,6 +137,22 @@ class EventModelTest(unittest.TestCase):
 
         response = client.post(reverse('hoo_event:addNewEvent'), event_data)
         self.assertEqual(response.status_code, 302)  # Check for a redirect (status code 302)
+
+        # Get all events with the title 'test_event_creation'
+        events = Event.objects.filter(event_title='test_event_creation')
+
+        # Check if at least one event with the given title exists
+        self.assertTrue(events.exists())
+
+        # You can also check other attributes of the events
+        for new_event in events:
+            self.assertEqual(new_event.event_title, event_data['event_title'])
+            self.assertEqual(new_event.event_street_address, event_data['event_street_address'])
+            self.assertEqual(new_event.event_city, event_data['event_city'])
+            self.assertEqual(new_event.event_state, event_data['event_state'])
+            self.assertEqual(new_event.event_status, str(EventStatus.PENDING))  # Check that the event status is pending
+            self.assertEqual(new_event.event_start_time, start_time)  # Check event start time
+            self.assertEqual(new_event.event_end_time, end_time)  # Check event end time
 
     def test_event_detail_view(self):
         event = Event.objects.create(
