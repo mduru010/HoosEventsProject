@@ -27,6 +27,7 @@ from django.utils import timezone
 from django.views import generic
 # import googlemaps
 
+
 @login_required
 def main(request):
     regular_users = Group.objects.get(name='regular_users')
@@ -41,7 +42,7 @@ def main(request):
     if request.user.is_staff:
         return redirect('admin:index')
     elif request.user.groups.filter(name='admin_users').exists():
-        return redirect(reverse('hoo_event:pending'))
+        return redirect(reverse("hoo_event:pending"))
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect(reverse('hoo_event:index'))
 
@@ -136,7 +137,12 @@ class ShowPendingView(generic.ListView):
         """
         get all pending events so admin can look at each and approve.
         """
-        return Event.objects.filter(event_status__exact=EventStatus.PENDING)
+        all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING)
+        n = len(all_pending)
+
+        if n < 10:
+            return all_pending
+        return all_pending[:10]
 
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"

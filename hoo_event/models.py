@@ -22,7 +22,7 @@ class EventForm(forms.Form):
     event_state = forms.CharField(max_length=100)
     event_start_time = forms.DateTimeField()
     event_end_time = forms.DateTimeField()
-    # event_description = forms.CharField(widget=forms.Textarea)
+
 
 class Event(models.Model):
     event_title = models.CharField(max_length=100)
@@ -34,7 +34,6 @@ class Event(models.Model):
     event_start_time = models.DateTimeField(default="2000-01-01T00:00")
     event_end_time = models.DateTimeField(default="2000-01-01T00:00")
     event_status = models.CharField(default=EventStatus.PENDING)
-
     # approved = models.BooleanField(default=False)
 
     def __str__(self):

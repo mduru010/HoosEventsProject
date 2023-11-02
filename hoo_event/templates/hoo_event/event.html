@@ -31,16 +31,18 @@
     <p>{{ event.event_start_time }}</p>
     <strong>End time: </strong>
     <p>{{ event.event_end_time }}</p>
-    {% if event.event_status == "EventStatus.PENDING" %}
-        <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Approve"><br><br>
-        </form>
-        <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Deny"><br><br>
-        </form>
-    {% endif %}
+    {% if 'admin_users' in user_groups %}
+      {% if event.event_status == "EventStatus.PENDING" %}
+          <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Approve"><br><br>
+          </form>
+          <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Deny"><br><br>
+          </form>
+      {% endif %}
+      {% endif %}
     <div id="map"></div>
 
     <!-- prettier-ignore -->
