@@ -1,8 +1,14 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'hoo_event/pending_event.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -11,10 +17,12 @@
 
 {% if 'admin_users' in user_groups %}
     <h1>These events are awaiting approval from admins.</h1>
+
+    <div id="pending-events-backend-container">    
     {% if pending_events %}
 
         {% for event in pending_events %}
-            <li style="margin-bottom: 10px; text-align: center; list-style: none">
+            <li id="pending-event-item-style">
                 <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
             </li>
         {% endfor %}
@@ -22,7 +30,13 @@
     {% else %}
         <p style="text-align: center">No events are available.</p>
     {% endif %}
-     <a href="{% url 'hoo_event:index' %}">Go back to main page</a>
+
+    <br>
+    <br>
+     <a href="{% url 'hoo_event:index' %}" id="return-to-main-page">Go back to main page</a>
+
+     </div>
+
 {% else %}
     <div align="center">
      {# I got Sherriff's image from this link: https://marksherriff.com/ #}
