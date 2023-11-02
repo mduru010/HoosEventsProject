@@ -27,6 +27,12 @@ from django.utils import timezone
 from django.views import generic
 # import googlemaps
 
+def user_group(request):
+    user_groups = []
+    if request.user.is_authenticated:
+        user_groups = [group.name for group in request.user.groups.all()]
+    return {'user_groups': user_groups}
+
 @login_required
 def main(request):
     regular_users = Group.objects.get(name='regular_users')
@@ -41,7 +47,7 @@ def main(request):
     if request.user.is_staff:
         return redirect('admin:index')
     elif request.user.groups.filter(name='admin_users').exists():
-        return redirect(reverse('hoo_event:pending'))
+        return redirect(reverse("hoo_event:pending"))
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect(reverse('hoo_event:index'))
 
