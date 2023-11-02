@@ -5,40 +5,48 @@
 
 <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
 <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
 
-<h1 class="m-3">Create New Event</h1>
-<form class="m-3" action="{% url 'hoo_event:addNewEvent' %}" method="post">
+<div class="m-3">
+    <h1 class="m-3">Create New Event</h1>
+    <form class="m-3" action="{% url 'hoo_event:addNewEvent' %}" method="post">
 
-    {% csrf_token %}
+        {% csrf_token %}
 
-    <label for="event_title" class="form-label">What is this event called?</label><br> <!-- User enters the address-->
-    <input type="text" class="form-control" id="event_title" name="event_title" value="Hoos Hack"><br>
+        <label for="event_title" class="form-label">What is this event called?</label><br> <!-- User enters the address-->
+        <input type="text" class="form-control" id="event_title" name="event_title" value="Hoos Hack"><br>
 
-    <label for="event_street_address" class="form-label">Enter The Street Address:</label><br> <!-- User enters the address-->
-    <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="85 Engineer's Way"><br>
+        <label for="event_street_address" class="form-label">Enter The Street Address:</label><br> <!-- User enters the address-->
+        <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="85 Engineer's Way"><br>
 
-    <label for="event_city" class="form-label">Enter Your City:</label><br> <!-- User enters the address-->
-    <input type="text" class="form-control" id="event_city" name="event_city" value="Charlottesville"><br>
+        <label for="event_city" class="form-label">Enter Your City:</label><br> <!-- User enters the address-->
+        <input type="text" class="form-control" id="event_city" name="event_city" value="Charlottesville"><br>
 
-    <label for="event_state" class="form-label">Enter Your State:</label><br> <!-- User enters the event name-->
-    <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br>
+        <label for="event_state" class="form-label">Enter Your State:</label><br> <!-- User enters the event name-->
+        <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br>
 
-    {# I learn how to input date time in html from this source: #}
-    {# https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local #}
-    <label for="start_time" class="form-label">Event Start Time:</label><br>
-    <input type="datetime-local" class="form-control" id="start_time" name="event_start_time" value="2000-01-01T00:00"><br>
+        {# I learn how to input date time in html from this source: #}
+        {# https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local #}
+        <label for="start_time" class="form-label">Event Start Time:</label><br>
+        <input type="datetime-local" class="form-control" id="start_time" name="event_start_time" value="2000-01-01T00:00"><br>
 
-    <label for="end_time" class="form-label">Event End Time:</label><br>
-    <input type="datetime-local" class="form-control" id="end_time" name="event_end_time" value="2000-01-01T00:00"><br><br>
+        <label for="end_time" class="form-label">Event End Time:</label><br>
+        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time" value="2000-01-01T00:00"><br><br>
 
-{#    <label>Enter Time Of Event:</label><br> <!-- User enters#}
-{#{#    <input type="text" name="event_time_start" value="3:00PM"><br><br>#}
-{#{##}
-{#{#    <label>Enter Time Of Event:</label><br> <!-- User enters the event name-->#}
-<!-- {#{#    <input type="text" name="event_time_end" value="6:00PM"><br><br>#}
-{#{##}
-{#{#    <label>Enter a Brief Description:</label><br> <!-- User enters the event name-->#}
-{#{#    <input type="text" name="event_description" value="Hack for fun!"><br><br> the event name-->#} -->
-    
-    <input type="submit" value="Submit">
-</form>
+    {#    <label>Enter Time Of Event:</label><br> <!-- User enters#}
+    {#{#    <input type="text" name="event_time_start" value="3:00PM"><br><br>#}
+    {#{##}
+    {#{#    <label>Enter Time Of Event:</label><br> <!-- User enters the event name-->#}
+    <!-- {#{#    <input type="text" name="event_time_end" value="6:00PM"><br><br>#}
+    {#{##}
+    {#{#    <label>Enter a Brief Description:</label><br> <!-- User enters the event name-->#}
+    {#{#    <input type="text" name="event_description" value="Hack for fun!"><br><br> the event name-->#} -->
+        
+        <input type="submit" value="Submit">
+    </form>
+
+    <a id="return-to-main-page" class="btn text-center" href="{% url 'hoo_event:index' %}">Go back to main page</a>
+</div>
