@@ -27,11 +27,6 @@ from django.utils import timezone
 from django.views import generic
 # import googlemaps
 
-def user_group(request):
-    user_groups = []
-    if request.user.is_authenticated:
-        user_groups = [group.name for group in request.user.groups.all()]
-    return {'user_groups': user_groups}
 
 @login_required
 def main(request):
