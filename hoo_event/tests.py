@@ -7,8 +7,15 @@ from django.test import Client, TestCase
 import time
 from datetime import datetime
 from django.utils import timezone
+from django.db import models
+from django.contrib.auth.models import User, Group, Permission
+from .models import Event, EventStatus
 
 class EventModelTest(unittest.TestCase):
+    # event_start_time = models.DateTimeField(default=timezone.now)  # Use timezone.now()
+    # event_end_time = models.DateTimeField(default=timezone.now)  # Use timezone.now()
+
+    # event_status = models.CharField(default=EventStatus.PENDING, max_length=10)
 
     event_data = {
         'event_title': "Test Event",
@@ -120,3 +127,95 @@ class EventModelTest(unittest.TestCase):
         response = client.get(reverse('hoo_event:recent'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("Test Event" in response.content.decode())
+
+class AdminUserTests(unittest.TestCase):
+    def setUp(self):
+        # Create a regular user with a unique username
+        regular_username = f"unique_testuser_{int(time.time())}"
+        self.regular_user = User.objects.create_user(
+            username=regular_username,
+            password='regularpassword'
+        )
+
+        # Create an admin user with a unique username
+        admin_username = f"unique_adminuser_{int(time.time())}"
+        self.admin_user = User.objects.create_user(
+            username=admin_username,
+            password='adminpassword'
+        )
+
+        # Create an Event
+        self.event = Event.objects.create(
+            event_title="Test Event",
+            event_longitude=40.7128,
+            event_latitude=-74.0060,
+            event_street_address="123 Main St",
+            event_city="New York",
+            event_state="NY",
+            event_status=EventStatus.PENDING
+        )
+
+        # Add the admin user to the admin_users group
+        admin_users_group, created = Group.objects.get_or_create(name='admin_users')
+        self.admin_user.groups.add(admin_users_group)
+
+        # Create a test client
+        self.client = Client()
+
+    def test_admin_can_approve_event(self):
+        # Create a test client
+        client = Client()
+
+        # Admin user logs in
+        client.login(username='adminuser', password='adminpassword')
+
+        # Get the event detail page
+        response = client.get(reverse('hoo_event:event', args=[self.event.id]))
+
+        # Check that the response status code is 200 (success)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the "Approve" button is present on the page
+        self.assertIn('Approve', response.content.decode())
+
+        # Simulate approving the event by posting the approval form (you need to define this in your app)
+        response = client.post(reverse('hoo_event:approveEvent', args=[self.event.id]))
+
+        # Refresh the event from the database
+        self.event.refresh_from_db()
+
+        # Check that the event status is now "APPROVED" using the integer value
+        self.assertEqual(self.event.event_status, "EventStatus.APPROVED")
+
+    def test_regular_user_cannot_approve_event(self):
+        # Create a test client
+        client = Client()
+
+        # Regular user logs in
+        client.login(username='regularuser', password='regularpassword')
+
+        # Get the event detail page
+        response = client.get(reverse('hoo_event:event', args=[self.event.id]))
+
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        # Check if the "Approve" button is not present by looking for its attributes
+        self.assertNotIn('<input type="submit" value="APPROVED">', response.content.decode())
+
+    def test_admin_can_deny_event(self):
+        # Admin user logs in
+        self.client.login(username=self.admin_user.username, password='adminpassword')
+
+        # Get the event detail page
+        response = self.client.get(reverse('hoo_event:event', args=[self.event.id]))
+
+        # Check that the "Deny" button is present on the page
+        self.assertIn('Deny', response.content.decode())
+
+        # Simulate denying the event by posting the denial form
+        response = self.client.post(reverse('hoo_event:denyEvent', args=[self.event.id]))
+
+        # Check that the event status is now "DENIED"
+        self.event.refresh_from_db()
+        self.assertEqual(self.event.event_status, "EventStatus.DENIED")
