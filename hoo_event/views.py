@@ -41,7 +41,7 @@ def main(request):
     if request.user.is_staff:
         return redirect('admin:index')
     elif request.user.groups.filter(name='admin_users').exists():
-        return redirect('admin_event')
+        return redirect(reverse('hoo_event:pending'))
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect(reverse('hoo_event:index'))
 
