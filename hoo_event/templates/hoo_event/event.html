@@ -6,6 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>HTML 5 Boilerplate</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    {% load bootstrap5 %}
+    {% load static %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" href="style.css"> -->
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnBBWV6Nih80bhNyDurMBgAv9wk5Dsl7k"></script> -->
     <style>
@@ -95,7 +106,7 @@
       //       });
       //   }
     </script>
-   <br><a href="{% url 'hoo_event:index' %}">Go back to main page</a><br><br>
-   <a href="{% url 'hoo_event:recent' %}">Or check out more recent events</a>
+   <br><a id="return-to-main-page" href="{% url 'hoo_event:index' %}">Go back to main page</a><br><br>
+   <a class="back" href="{% url 'hoo_event:recent' %}">Or check out more recent events</a>
   </body>
 </html>

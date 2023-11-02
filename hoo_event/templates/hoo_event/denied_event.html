@@ -6,6 +6,10 @@
 
 <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
 <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
 
 <html lang="en">
 <head>
@@ -13,23 +17,23 @@
     <title>Title</title>
 </head>
 <body>
-
-</body>
-
-<h1 class="text-center mb-5 mt-3">Denied Events</h1>
-{% if denied_events %}
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <ul class="list-group w-75">
-        {% for event in denied_events %}
-            <li class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
-                <a class="text-black" href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-            </li>
-        {% endfor %}
-        </ul>
+    <div class="m-3">
+        <h1 class="text-center mb-5 mt-3">Denied Events</h1>
+        {% if denied_events %}
+            <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+                <ul class="list-group w-75">
+                {% for event in denied_events %}
+                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
+                        <a class="text-white" href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p style="text-align: center">No events are available.</p>
+        {% endif %}
+         <a id="return-to-main-page" class="btn text-center" href="{% url 'hoo_event:index' %}">Go back to main page</a>
     </div>
-{% else %}
-    <p style="text-align: center">No events are available.</p>
-{% endif %}
- <a class="btn text-center" href="{% url 'hoo_event:index' %}">Go back to main page</a>
+</body>
 
  </html>
