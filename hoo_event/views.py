@@ -122,7 +122,7 @@ class ShowRecentView(generic.ListView):
         """
         Get the most 5 recently added events
         """
-        all_events = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
+        all_events = Event.objects.filter(event_status__exact=EventStatus.APPROVED).order_by("id").values()
         n = len(all_events)
 
         if n < 5:
@@ -137,12 +137,12 @@ class ShowPendingView(generic.ListView):
         """
         get all pending events so admin can look at each and approve.
         """
-        all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING)
+        all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("id").values()
         n = len(all_pending)
-
+        print(type(all_pending))
         if n < 10:
             return all_pending
-        return all_pending[:10]
+        return all_pending[n - 10: n]
 
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"
@@ -152,7 +152,12 @@ class ShowDeniedView(generic.ListView):
         """
         get all pending events so admin can look at each and approve.
         """
-        return Event.objects.filter(event_status__exact=EventStatus.DENIED)
+        denied_events = Event.objects.filter(event_status__exact=EventStatus.DENIED).order_by("id").values()
+        n = len(denied_events)
+
+        if n < 10:
+            return denied_events
+        return denied_events[n - 10: n]
 
 
 def approveEvent(request, event_id):
