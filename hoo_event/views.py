@@ -51,7 +51,6 @@ def addEvent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
             event_title = form.cleaned_data['event_title']
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
@@ -59,8 +58,6 @@ def addEvent(request):
             event_start_time = form.cleaned_data['event_start_time']
             event_end_time = form.cleaned_data['event_end_time']
             # event_description = form.cleaned_data['event_description']
-            print("start:", event_start_time)
-            print("end:", event_end_time)
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -99,9 +96,9 @@ def addEvent(request):
                 event_start_time = event_start_time,
                 event_end_time = event_end_time,
                 event_status = EventStatus.PENDING,
+                event_email = request.user.email,
                 # event_description = event_description
             )
-            print(lat, lng)
 
             new_event.save()
             return HttpResponseRedirect(reverse('hoo_event:index'))
