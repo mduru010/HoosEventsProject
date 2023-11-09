@@ -4,7 +4,7 @@ from .models import Event, EventForm, EventStatus
 from django.contrib.auth.models import User, Group
 from .views import addEvent
 from django.test import Client, TestCase
-import time
+import time, random
 from datetime import datetime
 from django.utils import timezone
 from django.db import models
@@ -133,14 +133,14 @@ class AdminUserTests(unittest.TestCase):
         # Create a regular user with a unique username
         regular_username = f"unique_testuser_{int(time.time())}"
         self.regular_user = User.objects.create_user(
-            username=regular_username,
+            username=regular_username + str(random.randrange(20000)),
             password='regularpassword'
         )
 
         # Create an admin user with a unique username
         admin_username = f"unique_adminuser_{int(time.time())}"
         self.admin_user = User.objects.create_user(
-            username=admin_username,
+            username=admin_username + str(random.randrange(20000)),
             password='adminpassword'
         )
 
@@ -219,3 +219,7 @@ class AdminUserTests(unittest.TestCase):
         # Check that the event status is now "DENIED"
         self.event.refresh_from_db()
         self.assertEqual(self.event.event_status, "EventStatus.DENIED")
+
+    def test_delete_all_test_events(self):
+        Event.objects.filter(event_title="Test Event").delete()
+        Event.objects.filter(event_title="test_event_creation").delete()
