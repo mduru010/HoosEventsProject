@@ -18,7 +18,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
-from .models import EventForm, Event, EventStatus
+from .models import EventForm, Event, EventStatus, HeadCount
 import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
@@ -109,7 +109,9 @@ def addEvent(request):
 
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render(request, 'event.html', {'event': event})
+    events_signed_up = HeadCount.objects.filter(event__exact=event)
+    print(events_signed_up)
+    return render(request, 'event.html', {'event': event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
@@ -136,7 +138,6 @@ class ShowPendingView(generic.ListView):
         """
         all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("id").values()
         n = len(all_pending)
-        print(type(all_pending))
         if n < 10:
             return all_pending
         return all_pending[n - 10: n]
@@ -162,8 +163,23 @@ def approveEvent(request, event_id):
     current_event.event_status = EventStatus.APPROVED
     current_event.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
+
 def denyEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.DENIED
     current_event.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
+
+def signUpEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
+    new_head_count.save()
+    return HttpResponseRedirect(reverse('hoo_event:index'))
+
+def showMyEvent(request):
+    host_events = Event.objects.filter(event_email__exact=request.user.email,
+                                       event_status__exact=EventStatus.APPROVED)
+    # I learnt how to query foreign key from here:
+    # https://stackoverflow.com/questions/15507171/django-filter-query-foreign-key
+    joined_events = Event.objects.filter(headcount__user_email__exact=request.user.email)
+    return render(request, 'my_event.html', {'host_events': host_events, 'joined_events': joined_events})

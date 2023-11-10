@@ -40,3 +40,10 @@ class Event(models.Model):
         return self.event_title
 
     # event_description = models.TextField()
+
+class HeadCount(models.Model):
+    user_email = models.CharField(max_length=100)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user_email} is signed up for {self.event.event_title}"
