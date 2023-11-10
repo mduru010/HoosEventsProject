@@ -16,9 +16,11 @@
         <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
             <ul class="list-group w-75">
                 {% for event in latest_events %}
-                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
-                        <a class="text-white" href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-                    </li>
+                    {% if event.event_email != user.email %}
+                        <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
+                            <a class="text-white" href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
