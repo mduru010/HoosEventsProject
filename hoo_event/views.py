@@ -176,3 +176,11 @@ def signUpEvent(request, event_id):
     new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
     new_head_count.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
+
+def showMyEvent(request):
+    host_events = Event.objects.filter(event_email__exact=request.user.email,
+                                       event_status__exact=EventStatus.APPROVED)
+    # I learnt how to query foreign key from here:
+    # https://stackoverflow.com/questions/15507171/django-filter-query-foreign-key
+    joined_events = Event.objects.filter(headcount__user_email__exact=request.user.email)
+    return render(request, 'my_event.html', {'host_events': host_events, 'joined_events': joined_events})
