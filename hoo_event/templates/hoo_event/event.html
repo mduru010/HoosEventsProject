@@ -56,10 +56,12 @@
     {% endif %}
     {% if event.event_status == "EventStatus.APPROVED" %}
         {% if not events_signed_up %}
-            <form action="{% url 'hoo_event:signUp' event.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Sign Up"><br><br>
-              </form>
+            {% if event.event_email != user.email %}
+                <form action="{% url 'hoo_event:signUp' event.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="submit" value="Sign Up"><br><br>
+                  </form>
+            {% endif %}
         {% endif %}
     {% endif %}
     <div id="map"></div>
