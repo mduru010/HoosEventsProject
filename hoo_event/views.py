@@ -18,7 +18,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
-from .models import EventForm, Event, EventStatus
+from .models import EventForm, Event, EventStatus, HeadCount
 import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
@@ -109,7 +109,9 @@ def addEvent(request):
 
 def event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    return render(request, 'event.html', {'event': event})
+    events_signed_up = HeadCount.objects.filter(event__exact=event)
+    print(events_signed_up)
+    return render(request, 'event.html', {'event': event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
@@ -162,8 +164,15 @@ def approveEvent(request, event_id):
     current_event.event_status = EventStatus.APPROVED
     current_event.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
+
 def denyEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.DENIED
     current_event.save()
+    return HttpResponseRedirect(reverse('hoo_event:index'))
+
+def signUpEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
+    new_head_count.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
