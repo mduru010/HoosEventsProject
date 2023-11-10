@@ -138,7 +138,6 @@ class ShowPendingView(generic.ListView):
         """
         all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("id").values()
         n = len(all_pending)
-        print(type(all_pending))
         if n < 10:
             return all_pending
         return all_pending[n - 10: n]

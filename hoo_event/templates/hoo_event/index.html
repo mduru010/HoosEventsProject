@@ -52,11 +52,9 @@
         <div class="m-3" align="center">
           <a class="btn text-white" href="{% url 'hoo_event:recent' %}">View Recently Added Events</a>
         </div>
-        {% if 'admin_users' in user_groups %}
          <div class="m-3" align="center">
             <a class="btn text-white" href="{% url 'hoo_event:pending' %}">View pending list of events here</a>
          </div>
-        {% endif %}
         <div class="m-3" align="center">
           <a class="btn text-white" href="{% url 'hoo_event:denied' %}">View Denied Events</a>
         </div>
