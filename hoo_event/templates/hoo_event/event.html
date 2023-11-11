@@ -37,21 +37,22 @@
   </head>
   <body>
     <!-- <img src="https://media.npr.org/assets/img/2023/01/14/this-is-fine_custom-dcb93e90c4e1548ffb16978a5a8d182270c872a9-s1100-c50.jpg" alt="Italian Trulli"> -->
-    <h1>{{event.event_title}}</h1>
-    <strong>Start time: </strong>
-    <p>{{ event.event_start_time }}</p>
-    <strong>End time: </strong>
-    <p>{{ event.event_end_time }}</p>
-    {% if 'admin_users' in user_groups %}
+    
+      <h1>{{event.event_title}}</h1>
+      <strong>Start time: </strong>
+      <p>{{ event.event_start_time }}</p>
+      <strong>End time: </strong>
+      <p>{{ event.event_end_time }}</p>
+      {% if 'admin_users' in user_groups %}
       {% if event.event_status == "EventStatus.PENDING" %}
-          <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-              {% csrf_token %}
-              <input type="submit" value="Approve"><br><br>
-          </form>
-          <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
-              {% csrf_token %}
-              <input type="submit" value="Deny"><br><br>
-          </form>
+      <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Approve"><br><br>
+      </form>
+      <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Deny"><br><br>
+      </form>
       {% endif %}
     {% endif %}
     {% if event.event_status == "EventStatus.APPROVED" %}
