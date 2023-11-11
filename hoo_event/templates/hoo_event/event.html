@@ -62,6 +62,11 @@
                       <input type="submit" value="Sign Up"><br><br>
                   </form>
             {% endif %}
+        {% else %}
+             <form action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
+                 {% csrf_token %}
+                 <input type="submit" value="Remove Sign Up"><br><br>
+             </form>
         {% endif %}
     {% endif %}
     <div id="map"></div>

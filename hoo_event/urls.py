@@ -15,5 +15,6 @@ urlpatterns = [
     path('denied/', views.ShowDeniedView.as_view(), name="denied"),
     path('event/<int:event_id>/approve', views.approveEvent, name="approveEvent"),
     path('event/<int:event_id>/deny', views.denyEvent, name="denyEvent"),
-    path('event/<int:event_id>/signup', views.signUpEvent, name="signUp"),
+    path('event/<int:event_id>/register', views.signUpEvent, name="signUp"),
+    path('event/<int:event_id>/deregister', views.removeSignUpEvent, name="removeSignUp"),
 ]

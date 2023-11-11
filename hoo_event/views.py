@@ -176,6 +176,12 @@ def signUpEvent(request, event_id):
     new_head_count.save()
     return HttpResponseRedirect(reverse('hoo_event:index'))
 
+def removeSignUpEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    current_head_count = get_object_or_404(HeadCount, user_email=request.user.email, event=current_event)
+    current_head_count.delete()
+    return HttpResponseRedirect(reverse('hoo_event:index'))
+
 def showMyEvent(request):
     host_events = Event.objects.filter(event_email__exact=request.user.email,
                                        event_status__exact=EventStatus.APPROVED)
