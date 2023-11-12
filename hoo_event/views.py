@@ -166,13 +166,13 @@ def approveEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.APPROVED
     current_event.save()
-    return HttpResponseRedirect(reverse('hoo_event:index'))
+    return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def denyEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.DENIED
     current_event.save()
-    return HttpResponseRedirect(reverse('hoo_event:index'))
+    return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def signUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
