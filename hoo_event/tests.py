@@ -1,5 +1,6 @@
 import unittest
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 from .models import Event, EventForm, EventStatus
 from django.contrib.auth.models import User, Group
 from .views import addEvent
@@ -71,6 +72,7 @@ class EventModelTest(unittest.TestCase):
 
         event_data = {
             'event_title': 'test_event_creation',
+            'event_capacity': 10,
             'event_street_address': '456 Elm St',
             'event_city': 'Los Angeles',
             'event_state': 'CA',
@@ -98,18 +100,17 @@ class EventModelTest(unittest.TestCase):
             self.assertEqual(new_event.event_end_time, end_time)  # Check event end time
 
     def test_event_detail_view(self):
-        event = Event.objects.create(
-            event_title="Test Event",
-            event_latitude=40.7128,
-            event_longitude=-74.0060,
-            event_street_address="123 Main St",
-            event_city="New York",
-            event_state="NY",
-        )
         client = Client()
-        response = client.get(reverse('hoo_event:event', args=[event.id]))
+        user = User.objects.create_user(
+            username=f"unique_testuser_{int(time.time())}",
+            password="testpassword",
+        )
+        client.login(username=user.username, password="testpassword")
+
+        current_event = get_object_or_404(Event, id=450)
+        response = client.get(reverse('hoo_event:event', args=[current_event.id]))
         self.assertEqual(response.status_code, 200)
-        self.assertTrue("Test Event" in response.content.decode())
+        self.assertTrue(current_event.event_title in response.content.decode())
 
     def test_recent_events_view(self):
         # Create a test event with the event status set to approved

@@ -51,7 +51,6 @@ def addEvent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
             event_title = form.cleaned_data['event_title']
             event_capacity = form.cleaned_data['event_capacity']
             event_street_address = form.cleaned_data['event_street_address']
