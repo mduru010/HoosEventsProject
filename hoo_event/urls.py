@@ -17,4 +17,6 @@ urlpatterns = [
     path('event/<int:event_id>/deny', views.denyEvent, name="denyEvent"),
     path('event/<int:event_id>/register', views.signUpEvent, name="signUp"),
     path('event/<int:event_id>/deregister', views.removeSignUpEvent, name="removeSignUp"),
+    path('event/<int:event_id>/register/success', TemplateView.as_view(template_name="sign_up_success.html"), name="signUpSuccess"),
+    path('event/<int:event_id>/register/fail', TemplateView.as_view(template_name="sign_up_fail.html"), name="signUpFail"),
 ]
