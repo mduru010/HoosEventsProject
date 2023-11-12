@@ -37,13 +37,14 @@
   </head>
   <body>
     <!-- <img src="https://media.npr.org/assets/img/2023/01/14/this-is-fine_custom-dcb93e90c4e1548ffb16978a5a8d182270c872a9-s1100-c50.jpg" alt="Italian Trulli"> -->
-    
-      <h1>{{event.event_title}}</h1>
-      <strong>Start time: </strong>
-      <p>{{ event.event_start_time }}</p>
-      <strong>End time: </strong>
-      <p>{{ event.event_end_time }}</p>
-      {% if 'admin_users' in user_groups %}
+
+    <h1>{{event.event_title}}</h1>
+    <strong style="padding-left: 20px">Start time: </strong>
+    <p style="padding-left: 20px">{{ event.event_start_time }}</p>
+    <strong style="padding-left: 20px">End time: </strong>
+    <p style="padding-left: 20px">{{ event.event_end_time }}</p>
+    {% if 'admin_users' in user_groups %}
+
       {% if event.event_status == "EventStatus.PENDING" %}
       <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
         {% csrf_token %}
@@ -63,6 +64,15 @@
                       <input type="submit" value="Sign Up"><br><br>
                   </form>
             {% endif %}
+        {% else %}
+             <form action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
+                 {% csrf_token %}
+                 <input type="submit" value="Remove Sign Up"><br><br>
+             </form>
+        {% endif %}
+        {% if event.event_email == user.email %}
+            <strong style="padding-left: 20px">Event capacity:</strong>
+            <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
         {% endif %}
     {% endif %}
     <div id="map"></div>

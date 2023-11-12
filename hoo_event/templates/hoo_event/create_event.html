@@ -16,8 +16,11 @@
 
         {% csrf_token %}
 
-        <label for="event_title" class="form-label">What is this event called?</label><br> <!-- User enters the address-->
+        <label for="event_title" class="form-label">What is this event called?</label><br>
         <input type="text" class="form-control" id="event_title" name="event_title" value="Hoos Hack"><br>
+
+        <label for="event_capacity" class="form-label">What is the capacity of this event?</label><br>
+        <input type="text" class="form-control" id="event_capacity" name="event_capacity" value=1><br>
 
         <label for="event_street_address" class="form-label">Enter The Street Address:</label><br> <!-- User enters the address-->
         <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="85 Engineer's Way"><br>
@@ -25,25 +28,30 @@
         <label for="event_city" class="form-label">Enter Your City:</label><br> <!-- User enters the address-->
         <input type="text" class="form-control" id="event_city" name="event_city" value="Charlottesville"><br>
 
-        <label for="event_state" class="form-label">Enter Your State:</label><br> <!-- User enters the event name-->
+        <label for="event_state" class="form-label">Enter Your State:</label><br>
         <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br>
 
         {# I learn how to input date time in html from this source: #}
         {# https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local #}
         <label for="start_time" class="form-label">Event Start Time:</label><br>
-        <input type="datetime-local" class="form-control" id="start_time" name="event_start_time" value="2000-01-01T00:00"><br>
+        <input type="datetime-local" class="form-control" id="start_time" name="event_start_time"><br>
 
         <label for="end_time" class="form-label">Event End Time:</label><br>
-        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time" value="2000-01-01T00:00"><br><br>
+        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time"><br><br>
 
-    {#    <label>Enter Time Of Event:</label><br> <!-- User enters#}
-    {#{#    <input type="text" name="event_time_start" value="3:00PM"><br><br>#}
-    {#{##}
-    {#{#    <label>Enter Time Of Event:</label><br> <!-- User enters the event name-->#}
-    <!-- {#{#    <input type="text" name="event_time_end" value="6:00PM"><br><br>#}
-    {#{##}
-    {#{#    <label>Enter a Brief Description:</label><br> <!-- User enters the event name-->#}
-    {#{#    <input type="text" name="event_description" value="Hack for fun!"><br><br> the event name-->#} -->
+        <script>
+            function setCurrentDateTime() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+            document.getElementById('start_time').value = setCurrentDateTime();
+            document.getElementById('end_time').value = setCurrentDateTime();
+        </script>
         
         <input type="submit" value="Submit">
     </form>

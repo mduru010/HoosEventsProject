@@ -51,7 +51,9 @@ def addEvent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data)
             event_title = form.cleaned_data['event_title']
+            event_capacity = form.cleaned_data['event_capacity']
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
             event_state = form.cleaned_data['event_state']
@@ -97,6 +99,8 @@ def addEvent(request):
                 event_end_time = event_end_time,
                 event_status = EventStatus.PENDING,
                 event_email = request.user.email,
+                event_capacity=0,
+                event_full_capacity=event_capacity
                 # event_description = event_description
             )
 
@@ -108,10 +112,10 @@ def addEvent(request):
     return render(request, "hoo_event/create_event.html", {"form": form})
 
 def event(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
-    events_signed_up = HeadCount.objects.filter(event__exact=event)
-    print(events_signed_up)
-    return render(request, 'event.html', {'event': event, 'events_signed_up': events_signed_up})
+    current_event = get_object_or_404(Event, pk=event_id)
+    events_signed_up = HeadCount.objects.filter(event__exact=current_event,
+                                                user_email__exact=request.user.email)
+    return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
@@ -162,18 +166,32 @@ def approveEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.APPROVED
     current_event.save()
-    return HttpResponseRedirect(reverse('hoo_event:index'))
+    return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def denyEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
     current_event.event_status = EventStatus.DENIED
     current_event.save()
-    return HttpResponseRedirect(reverse('hoo_event:index'))
+    return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def signUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
-    new_head_count.save()
+    if current_event.event_capacity < current_event.event_full_capacity:
+        current_event.event_capacity += 1
+        current_event.save()
+
+        new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
+        new_head_count.save()
+        return HttpResponseRedirect(reverse('hoo_event:signUpSuccess', kwargs={'event_id' : event_id}))
+    return HttpResponseRedirect(reverse('hoo_event:signUpFail', kwargs={'event_id' : event_id}))
+
+def removeSignUpEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    current_event.event_capacity -= 1
+    current_event.save()
+
+    current_head_count = get_object_or_404(HeadCount, user_email=request.user.email, event=current_event)
+    current_head_count.delete()
     return HttpResponseRedirect(reverse('hoo_event:index'))
 
 def showMyEvent(request):
