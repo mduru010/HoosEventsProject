@@ -1,0 +1,12 @@
+#event-info-container {
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+}
+
+/* .return-to-main-page-wrapper {
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */

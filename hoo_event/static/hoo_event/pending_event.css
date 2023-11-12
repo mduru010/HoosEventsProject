@@ -25,10 +25,10 @@ h1 {
     color: white;
     border-radius: 30px;
     border-style: solid;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    padding-right: 30px;
     margin: 1px;
 
 }
@@ -39,6 +39,11 @@ h1 {
     font-family: "Montserrat";
     font-weight: 600;
     background-image: none;
+    display: inline-block;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
     /* background-color: black; */
 }
 
