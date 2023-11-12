@@ -17,6 +17,7 @@ class EventStatus(Enum):
 # Create your models here.
 class EventForm(forms.Form):
     event_title = forms.CharField(max_length=100)
+    event_capacity = forms.IntegerField()
     event_street_address = forms.CharField(max_length=100)
     event_city = forms.CharField(max_length=100)
     event_state = forms.CharField(max_length=100)
@@ -35,7 +36,8 @@ class Event(models.Model):
     event_end_time = models.DateTimeField(default="2000-01-01T00:00")
     event_status = models.CharField(default=EventStatus.PENDING)
     event_email = models.CharField(max_length=100)
-    event_capacity = models.PositiveIntegerField(default=1)
+    event_capacity = models.PositiveIntegerField(default=0) # This one keeps track of the actual people who signed up
+    event_full_capacity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return self.event_title

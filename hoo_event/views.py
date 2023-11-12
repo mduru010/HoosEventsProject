@@ -51,7 +51,9 @@ def addEvent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data)
             event_title = form.cleaned_data['event_title']
+            event_capacity = form.cleaned_data['event_capacity']
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
             event_state = form.cleaned_data['event_state']
@@ -97,6 +99,8 @@ def addEvent(request):
                 event_end_time = event_end_time,
                 event_status = EventStatus.PENDING,
                 event_email = request.user.email,
+                event_capacity=0,
+                event_full_capacity=event_capacity
                 # event_description = event_description
             )
 
@@ -172,8 +176,8 @@ def denyEvent(request, event_id):
 
 def signUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    if current_event.event_capacity > 0:
-        current_event.event_capacity -= 1
+    if current_event.event_capacity < current_event.event_full_capacity:
+        current_event.event_capacity += 1
         current_event.save()
 
         new_head_count = HeadCount.objects.create(user_email=request.user.email, event=current_event)
@@ -183,7 +187,7 @@ def signUpEvent(request, event_id):
 
 def removeSignUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    current_event.event_capacity += 1
+    current_event.event_capacity -= 1
     current_event.save()
 
     current_head_count = get_object_or_404(HeadCount, user_email=request.user.email, event=current_event)
