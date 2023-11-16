@@ -38,6 +38,8 @@ DEBUG = False
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
+SESSION_COOKIE_SECURE = True
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'asd-team-a04-929b38293922.herokuapp.com']
 
 
