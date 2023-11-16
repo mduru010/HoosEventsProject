@@ -131,7 +131,7 @@
                     map: map,
                 });
                 marker.addListener("mouseover", () => {
-                    const contentString = '<b>' + features[i].title + '</b><br>' + features[i].time;
+                    const contentString = '<b>' + features[i].title + '</b><br><br>' + features[i].time;
                     infoWindow.close();
                     infoWindow.setContent(contentString);
                     infoWindow.open(map, marker);
