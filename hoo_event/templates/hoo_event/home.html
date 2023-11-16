@@ -5,6 +5,7 @@
     {% load static %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'hoo_event/styles.css' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +35,30 @@
     </style>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            <img src="https://live.staticflickr.com/65535/53335102583_8411ec2cd3_t.jpg" width="30" height="30" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            {% if user.is_authenticated %}
+              <a class="nav-link" href="{% url 'hoo_event:addNewEvent' %}">Create Event</a>
+              <a class="nav-link" href="{% url 'hoo_event:myEvents' %}">My Events</a>
+              <a class="nav-link" href="{% url 'hoo_event:recent' %}">Recent Events</a>
+            {% if 'admin_users' in user_groups %}
+              <a class="nav-link" href="{% url 'hoo_event:pending' %}">Pending Events</a>
+            {% endif %}
+              <a class="nav-link" href="{% url 'hoo_event:denied' %}">Denied Events</a>
+            {% endif %}
+          </div>
+        </div>
+        </div>
+      </nav>
+
     <h1>Welcome to Hoo Events, {{ user.username }}!</h1>
     <div id="map"></div>
 
