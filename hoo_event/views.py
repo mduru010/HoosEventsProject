@@ -46,6 +46,7 @@ def main(request):
         return redirect(reverse("hoo_event:pending"))
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect(reverse('hoo_event:home'))
+    
 
 def home(request):
     events = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
