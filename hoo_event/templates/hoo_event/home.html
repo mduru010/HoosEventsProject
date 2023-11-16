@@ -57,10 +57,14 @@
             let title = event["fields"].event_title;
             let longitude = event["fields"].event_longitude;
             let latitude = event["fields"].event_latitude;
+            let start_time = event["fields"].event_start_time;
+            start_time = start_time.replace("T", " ");
+            start_time = start_time.replace("Z", "");
             events.push({
                 event_title: title,
                 longitude: longitude,
                 latitude: latitude,
+                start_time: start_time,
             });
             console.log(title);
             console.log(longitude);
@@ -77,7 +81,11 @@
         let map;
         let features = [];
 
-        function initMap() {
+        async function initMap() {
+            const iconBase =
+                "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+            const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+            const infoWindow = new InfoWindow();
             map = new google.maps.Map(document.getElementById("map"), {
                 center: new google.maps.LatLng(38.033554, -78.507980),
                 zoom: 16,
@@ -87,6 +95,8 @@
                 features.push({
                     position: new google.maps.LatLng(event.latitude, event.longitude),
                     type: "event",
+                    title: event.event_title,
+                    time: event.start_time,
                 });
             };
 
@@ -94,6 +104,12 @@
                 const marker = new google.maps.Marker({
                     position: features[i].position,
                     map: map,
+                });
+                marker.addListener("mouseover", () => {
+                    const contentString = '<b>' + features[i].title + '</b><br>' + features[i].time;
+                    infoWindow.close();
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, marker);
                 });
             }
         }
