@@ -25,6 +25,7 @@ from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
+from django.core.serializers import serialize
 # import googlemaps
 
 
@@ -45,6 +46,12 @@ def main(request):
         return redirect(reverse("hoo_event:pending"))
     elif request.user.groups.filter(name='regular_users').exists():
         return redirect(reverse('hoo_event:index'))
+
+def home(request):
+    events = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
+    events = serialize('json', events)
+    context = {'events': events}
+    return render(request, 'hoo_event/home.html', context)
 
 def addEvent(request):
     form = EventForm()
