@@ -58,7 +58,7 @@
 
     <!-- prettier-ignore -->
     <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-        ({key: "AIzaSyCW82YwEQtTNMM9kgIkdijVww7cyWyw3f4", v: "beta"});</script>
+        ({key: "AIzaSyBUBySC3PIE9ulvwqdfw86CjtmFZs6GtkA", v: "beta"});</script>
     
     <script>
 
@@ -88,7 +88,7 @@
         const marker = new AdvancedMarkerElement({
           map: map,
           position: position,
-          title: "Uluru",
+          title: "{{event.event_title}}",
         });
       }
 
@@ -105,6 +105,13 @@
       //           title: '{{ event.name }}',
       //       });
       //   }
+
+  // Generate distance from user's current location to event location:    
+  // https://maps.googleapis.com/maps/api/distancematrix/json
+  // ?destinations=New%20York%20City%2C%20NY
+  // &origins=Washington%2C%20DC%7CBoston
+  // &units=imperial
+  // &key=YOUR_API_KEY
     </script>
    <br><a id="return-to-main-page" href="{% url 'hoo_event:index' %}">Go back to main page</a><br><br>
    <a class="back" href="{% url 'hoo_event:recent' %}">Or check out more recent events</a>
