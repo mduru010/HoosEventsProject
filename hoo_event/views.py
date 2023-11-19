@@ -60,6 +60,7 @@ def addEvent(request):
         form = EventForm(request.POST)
         if form.is_valid():
             event_title = form.cleaned_data['event_title']
+            event_description = form.cleaned_data['event_description']
             event_capacity = form.cleaned_data['event_capacity']
             event_street_address = form.cleaned_data['event_street_address']
             event_city = form.cleaned_data['event_city']
@@ -97,6 +98,7 @@ def addEvent(request):
 
             new_event = Event.objects.create(
                 event_title=event_title,
+                event_description=event_description,
                 event_latitude = lat,
                 event_longitude = lng,
                 event_street_address=event_street_address,
@@ -122,6 +124,7 @@ def event(request, event_id):
     current_event = get_object_or_404(Event, pk=event_id)
     events_signed_up = HeadCount.objects.filter(event__exact=current_event,
                                                 user_email__exact=request.user.email)
+    print(current_event.event_description)
     return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
