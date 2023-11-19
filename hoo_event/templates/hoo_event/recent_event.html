@@ -1,53 +1,6 @@
-{% load bootstrap5 %}
-{% load static %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% extends 'base.html' %}
 
-<link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
-<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/hoo_event/home/">
-            <img src="https://live.staticflickr.com/65535/53335102583_22d2bea6c9_o.png" height="45" alt="">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hoo_event:addNewEvent' %}">Create Event</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hoo_event:myEvents' %}">My Events</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hoo_event:recent' %}">Recent Events</a>
-            </li>
-            {% if 'admin_users' in user_groups %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hoo_event:pending' %}">Pending Events</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hoo_event:denied' %}">Denied Events</a>
-            </li>
-            <li class="nav-item">
-                <form action="{% url 'logout' %}" class="ms-auto" method="post">
-                    {% csrf_token %}
-                    <button class="btn btn-secondary" type="submit">Logout</button>
-                </form>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
-
+{% block content %}
 <div class="m-3">
     <h1 class="text-center mb-5 mt-3">Recently Added Events</h1>
     {% if latest_events %}
@@ -66,3 +19,23 @@
         <p style="text-align: center">No events are available.</p>
     {% endif %}
 </div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

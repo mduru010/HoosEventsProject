@@ -127,17 +127,10 @@ def event(request, event_id):
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
     context_object_name = "latest_events"
-
-    def get_queryset(self):
-        """
-        Get the most 5 recently added events
-        """
-        all_events = Event.objects.filter(event_status__exact=EventStatus.APPROVED).order_by("id").values()
-        n = len(all_events)
-
-        if n < 5:
-            return all_events
-        return all_events[n - 5: n]
+    paginate_by = 5
+    model = Event  
+    queryset = Event.objects.filter(event_status=EventStatus.APPROVED).order_by("-id")
+    
 
 class ShowPendingView(generic.ListView):
     template_name = "hoo_event/pending_event.html"

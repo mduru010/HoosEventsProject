@@ -1,20 +1,6 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pending Events</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'hoo_event/pending_event.css' %}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
-</head>
-<body>
-
-</body>
-</html>
-
+{% block content %}
 {% if 'admin_users' in user_groups %}
     <h1>These events are awaiting approval from admins.</h1>
 
@@ -60,3 +46,4 @@
 
      </div>
 {% endif %}
+{% endblock %}
