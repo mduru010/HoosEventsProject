@@ -1,15 +1,6 @@
-{% load bootstrap5 %}
-{% load static %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% extends 'base.html' %}
 
-<link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
-<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
-
+{% block content %}
 <div class="m-3">
     <h1 class="m-3">Create New Event</h1>
     <form class="m-3" action="{% url 'hoo_event:addNewEvent' %}" method="post">
@@ -55,8 +46,5 @@
         
         <input type="submit" value="Submit">
     </form>
-
-    <div class="return-to-main-page-wrapper">
-    <a id="return-to-main-page" class="btn text-center" href="{% url 'hoo_event:home' %}">Go back to main page</a>
-    </div>
 </div>
+{% endblock %}

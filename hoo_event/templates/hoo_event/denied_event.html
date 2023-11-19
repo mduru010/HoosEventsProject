@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-{% load bootstrap5 %}
-{% load static %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% extends 'base.html' %}
 
-<link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
-<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'hoo_event/recent_event.css' %}" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+{% block content %}
 <body>
     <div class="m-3">
         <h1 class="text-center mb-5 mt-3">Denied Events</h1>
@@ -38,12 +23,9 @@
         {% else %}
             <p style="text-align: center">No events are available.</p>
         {% endif %}
-
-        <div class="return-to-main-page-wrapper">
-         <a id="return-to-main-page" class="btn text-center" href="{% url 'hoo_event:home' %}">Go back to main page</a>
-         </div>
-         
     </div>
 </body>
 
- </html>
+{% include "pagination.html" %}
+
+{% endblock %}
