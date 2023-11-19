@@ -135,32 +135,16 @@ class ShowRecentView(generic.ListView):
 class ShowPendingView(generic.ListView):
     template_name = "hoo_event/pending_event.html"
     context_object_name = "pending_events"
-
-    def get_queryset(self):
-        """
-        get all pending events so admin can look at each and approve.
-        """
-        all_pending = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("id").values()
-        n = len(all_pending)
-        if n < 10:
-            return all_pending
-        return all_pending[n - 10: n]
+    paginate_by = 5  
+    model = Event  
+    queryset = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("-id").values()
 
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"
     context_object_name = "denied_events"
-
-    def get_queryset(self):
-        """
-        get all pending events so admin can look at each and approve.
-        """
-        denied_events = Event.objects.filter(event_status__exact=EventStatus.DENIED).order_by("id").values()
-        n = len(denied_events)
-
-        if n < 10:
-            return denied_events
-        return denied_events[n - 10: n]
-
+    paginate_by = 5  
+    model = Event  
+    queryset = Event.objects.filter(event_status__exact=EventStatus.DENIED).order_by("-id").values()
 
 def approveEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
