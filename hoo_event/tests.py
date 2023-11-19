@@ -26,6 +26,10 @@ class EventModelTest(unittest.TestCase):
         'event_city': "New York",
         'event_state': "NY",
     }
+
+    def tearDown(self):
+        Event.objects.filter(event_title__exact='Test Event').delete()  # Delete the test event
+
     def test_create_event(self):
         # Create a test event
         event = Event()
@@ -72,6 +76,7 @@ class EventModelTest(unittest.TestCase):
 
         event_data = {
             'event_title': 'test_event_creation',
+            'event_description': 'Welcome',
             'event_capacity': 10,
             'event_street_address': '456 Elm St',
             'event_city': 'Los Angeles',
@@ -98,6 +103,8 @@ class EventModelTest(unittest.TestCase):
             self.assertEqual(new_event.event_status, str(EventStatus.PENDING))  # Check that the event status is pending
             self.assertEqual(new_event.event_start_time, start_time)  # Check event start time
             self.assertEqual(new_event.event_end_time, end_time)  # Check event end time
+
+        Event.objects.filter(event_title__exact='test_event_creation').delete() # Delete the test event
 
     def test_event_detail_view(self):
         client = Client()
@@ -162,6 +169,9 @@ class AdminUserTests(unittest.TestCase):
 
         # Create a test client
         self.client = Client()
+
+    def tearDown(self):
+        Event.objects.filter(event_title__exact=self.event).delete()  # Delete the test event
 
     def test_admin_can_approve_event(self):
         # Create a test client

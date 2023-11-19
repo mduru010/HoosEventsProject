@@ -124,7 +124,6 @@ def event(request, event_id):
     current_event = get_object_or_404(Event, pk=event_id)
     events_signed_up = HeadCount.objects.filter(event__exact=current_event,
                                                 user_email__exact=request.user.email)
-    print(current_event.event_description)
     return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
