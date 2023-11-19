@@ -112,7 +112,7 @@ def addEvent(request):
             )
 
             new_event.save()
-            return HttpResponseRedirect(reverse('hoo_event:index'))
+            return HttpResponseRedirect(reverse('hoo_event:home'))
         else:
             print(form.errors)
 
