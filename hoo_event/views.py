@@ -109,7 +109,6 @@ def addEvent(request):
                 event_email = request.user.email,
                 event_capacity=0,
                 event_full_capacity=event_capacity
-                # event_description = event_description
             )
 
             new_event.save()
@@ -189,12 +188,65 @@ def showMyEvent(request):
 
 def editEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    print(current_event.event_capacity)
     return render(request, 'edit_event.html', {'event': current_event})
 
 
 def updateEvent(request, event_id):
-    pass
+    form = EventForm()
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event_title = form.cleaned_data['event_title']
+            event_description = form.cleaned_data['event_description']
+            event_street_address = form.cleaned_data['event_street_address']
+            event_city = form.cleaned_data['event_city']
+            event_state = form.cleaned_data['event_state']
+            event_start_time = form.cleaned_data['event_start_time']
+            event_end_time = form.cleaned_data['event_end_time']
+
+            url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
+            street_address_split = event_street_address.split(' ')
+            street_address = ''
+            for word in street_address_split:
+                street_address += word + '+'
+
+            city_split = event_city.split(' ')
+            city = ''
+            for word in city_split:
+                city += word + '+'
+
+            state_split = event_state.split(' ')
+            state = ''
+            for word in state_split:
+                state += word + '+'
+
+            address = street_address + "," + city + "," + state
+            url += 'address=' + address + '&key=' + settings.GOOGLE_API_KEY
+
+            response = requests.get(url)
+            data = response.json()
+            lat = data['results'][0]['geometry']['location']['lat']
+            lng = data['results'][0]['geometry']['location']['lng']
+
+            current_event = get_object_or_404(Event, id=event_id)
+            current_event.event_title = event_title
+            current_event.event_description = event_description
+            current_event.event_latitude = lat
+            current_event.event_longitude = lng
+            current_event.event_street_address = event_street_address
+            current_event.event_city = event_city
+            current_event.event_state = event_state
+            current_event.event_start_time = event_start_time
+            current_event.event_end_time = event_end_time
+
+            current_event.save()
+            return HttpResponseRedirect(reverse('hoo_event:myEvents'))
+        else:
+            print(form.errors)
+
+    return render(request, "hoo_event/edit_event.html", {"form": form})
+
 
 
 
