@@ -247,6 +247,10 @@ def updateEvent(request, event_id):
 
     return render(request, "hoo_event/edit_event.html", {"form": form})
 
+def deleteEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    current_event.delete()
+    return HttpResponseRedirect(reverse('hoo_event:myEvents'))
 
 
 
