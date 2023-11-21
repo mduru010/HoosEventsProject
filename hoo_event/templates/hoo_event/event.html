@@ -59,6 +59,7 @@
         {% if event.event_email == user.email %}
             <strong style="padding-left: 20px">Event capacity:</strong>
             <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
+            <a class="text-white" href="{% url 'hoo_event:editEvent' event.id %}">You can edit your event here</a>
         {% endif %}
     {% endif %}
     <div id="map"></div>

@@ -67,7 +67,6 @@ def addEvent(request):
             event_state = form.cleaned_data['event_state']
             event_start_time = form.cleaned_data['event_start_time']
             event_end_time = form.cleaned_data['event_end_time']
-            # event_description = form.cleaned_data['event_description']
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -187,3 +186,30 @@ def showMyEvent(request):
     # https://stackoverflow.com/questions/15507171/django-filter-query-foreign-key
     joined_events = Event.objects.filter(headcount__user_email__exact=request.user.email)
     return render(request, 'my_event.html', {'host_events': host_events, 'joined_events': joined_events})
+
+def editEvent(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+    print(current_event.event_capacity)
+    return render(request, 'edit_event.html', {'event': current_event})
+
+
+def updateEvent(request, event_id):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
