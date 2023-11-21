@@ -20,4 +20,7 @@ urlpatterns = [
     path('event/<int:event_id>/deregister', views.removeSignUpEvent, name="removeSignUp"),
     path('event/<int:event_id>/register/success', TemplateView.as_view(template_name="sign_up_success.html"), name="signUpSuccess"),
     path('event/<int:event_id>/register/fail', TemplateView.as_view(template_name="sign_up_fail.html"), name="signUpFail"),
+    path('event/<int:event_id>/edit', views.editEvent, name="editEvent"),
+    path('event/<int:event_id>/update', views.updateEvent, name="updateEvent"),
+    path('event/<int:event_id>/delete', views.deleteEvent, name="deleteEvent"),
 ]

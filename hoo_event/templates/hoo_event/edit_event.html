@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-3">
+    <h1 class="m-3">Editing your event</h1>
+    <form class="m-3" action="{% url 'hoo_event:updateEvent' event.id %}" method="post">
+
+        {% csrf_token %}
+
+        <label for="event_title" class="form-label">What is this event called?</label><br>
+        <input type="text" class="form-control" id="event_title" name="event_title" value="{{ event.event_title }}"><br>
+
+        <label for="event_description" class="form-label">Enter the Event Description</label><br>
+        <input type="text" class="form-control" id="event_description" name="event_description" value="{{ event.event_description }}"><br>
+
+        <label for="event_street_address" class="form-label">Enter The Street Address:</label><br>
+        <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="{{ event.event_street_address }}"><br>
+
+        <label for="event_city" class="form-label">Enter Your City:</label><br>
+        <input type="text" class="form-control" id="event_city" name="event_city" value="{{ event.event_city }}"><br>
+
+        <label for="event_state" class="form-label">Enter Your State:</label><br>
+        <input type="text" class="form-control" id="event_state" name="event_state" value="{{ event.event_state }}"><br>
+
+        {#  https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#}
+        <label for="start_time" class="form-label">Event Start Time:</label><br>
+        <input type="datetime-local" class="form-control" id="start_time" name="event_start_time" value="{{ event.event_start_time|date:'Y-m-d\TH:i' }}"><br>
+
+        <label for="end_time" class="form-label">Event End Time:</label><br>
+        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time" value="{{ event.event_end_time|date:'Y-m-d\TH:i' }}"><br><br>
+        
+        <input type="submit" value="Update">
+
+{#        <label for="event_capacity" class="form-label" style="visibility: hidden">What is the capacity of this event?</label><br>#}
+        <input type="text" class="form-control" id="event_capacity" name="event_capacity" style="visibility: hidden" value={{ event.event_full_capacity }}><br>
+        {# This has to stay in since the Event Form needs it #}
+    </form>
+</div>
+{% endblock %}
