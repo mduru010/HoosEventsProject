@@ -23,6 +23,8 @@
     <!-- <img src="https://media.npr.org/assets/img/2023/01/14/this-is-fine_custom-dcb93e90c4e1548ffb16978a5a8d182270c872a9-s1100-c50.jpg" alt="Italian Trulli"> -->
 
     <h1>{{event.event_title}}</h1>
+    <strong style="padding-left: 20px">Event description: </strong>
+    <p style="padding-left: 20px">{{ event.event_description }}</p>
     <strong style="padding-left: 20px">Start time: </strong>
     <p style="padding-left: 20px">{{ event.event_start_time }}</p>
     <strong style="padding-left: 20px">End time: </strong>
@@ -39,15 +41,24 @@
         <input type="submit" value="Deny"><br><br>
       </form>
       {% endif %}
+    {% elif user.email == event.event_email %}
+        {% if event.event_status == "EventStatus.PENDING" %}
+      <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Approve"><br><br>
+      </form>
+      <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Deny"><br><br>
+      </form>
+      {% endif %}
     {% endif %}
     {% if event.event_status == "EventStatus.APPROVED" %}
         {% if not events_signed_up %}
-            {% if event.event_email != user.email %}
-                <form action="{% url 'hoo_event:signUp' event.id %}" method="post">
-                      {% csrf_token %}
-                      <input type="submit" value="Sign Up"><br><br>
-                  </form>
-            {% endif %}
+            <form action="{% url 'hoo_event:signUp' event.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Sign Up"><br><br>
+              </form>
         {% else %}
              <form action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
                  {% csrf_token %}
@@ -57,6 +68,8 @@
         {% if event.event_email == user.email %}
             <strong style="padding-left: 20px">Event capacity:</strong>
             <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
+            <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a><br>
+            <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:deleteEvent' event.id %}">Click here to Delete this Event</a>
         {% endif %}
     {% endif %}
     <div id="map"></div>
