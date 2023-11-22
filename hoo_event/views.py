@@ -241,7 +241,7 @@ def updateEvent(request, event_id):
             current_event.event_end_time = event_end_time
 
             current_event.save()
-            return HttpResponseRedirect(reverse('hoo_event:myEvents'))
+            return HttpResponseRedirect(reverse('hoo_event:event', kwargs={'event_id' : event_id}))
         else:
             print(form.errors)
 
