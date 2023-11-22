@@ -23,4 +23,5 @@ urlpatterns = [
     path('event/<int:event_id>/edit', views.editEvent, name="editEvent"),
     path('event/<int:event_id>/update', views.updateEvent, name="updateEvent"),
     path('event/<int:event_id>/delete', views.deleteEvent, name="deleteEvent"),
+    path('googled45417b2986febe5.html/', TemplateView.as_view(template_name="googled45417b2986febe5.html"), name="g-verification"),
 ]
