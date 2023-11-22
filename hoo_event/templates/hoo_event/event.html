@@ -68,9 +68,13 @@
         {% if event.event_email == user.email %}
             <strong style="padding-left: 20px">Event capacity:</strong>
             <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
-            <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a><br>
-            <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:deleteEvent' event.id %}">Click here to Delete this Event</a>
         {% endif %}
+    {% endif %}
+    {% if user.email == event.event_email %}
+        {% if event.event_status == "EventStatus.PENDING" %}
+              <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a><br>
+        {% endif %}
+        <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:deleteEvent' event.id %}">Click here to Delete this Event</a>
     {% endif %}
     <div id="map"></div>
 
