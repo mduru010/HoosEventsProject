@@ -32,22 +32,22 @@
     {% if 'admin_users' in user_groups %}
 
       {% if event.event_status == "EventStatus.PENDING" %}
-      <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+      <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
         {% csrf_token %}
         <input type="submit" value="Approve"><br><br>
       </form>
-      <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+      <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
         {% csrf_token %}
         <input type="submit" value="Deny"><br><br>
       </form>
       {% endif %}
     {% elif user.email == event.event_email %}
         {% if event.event_status == "EventStatus.PENDING" %}
-      <form action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+      <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
         {% csrf_token %}
         <input type="submit" value="Approve"><br><br>
       </form>
-      <form action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+      <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
         {% csrf_token %}
         <input type="submit" value="Deny"><br><br>
       </form>
@@ -72,8 +72,9 @@
     {% endif %}
     {% if user.email == event.event_email %}
         {% if event.event_status == "EventStatus.PENDING" %}
-              <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a><br>
+              <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a>
         {% endif %}
+        <br><br>
         <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:deleteEvent' event.id %}">Click here to Delete this Event</a>
     {% endif %}
     <div id="map"></div>
