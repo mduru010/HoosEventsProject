@@ -3,25 +3,33 @@
 {% block content %}
 <body>
     {% if host_events %}
-        <h1>Here are the events you are hosting:</h1>
-        {% for event in host_events %}
-            <li>
-                <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-            </li>
-        {% endfor %}
+        <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+            <h1  class="text-center mb-5 mt-3">Here are the events you are hosting:</h1>
+            <ul class="list-group w-75">
+                {% for event in host_events %}
+                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
+                        <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% else %}
-        <h1>You are not hosting any events</h1>
+        <h1 class="text-center mb-5 mt-3">You are not hosting any events</h1>
     {%  endif %}
     <br><br>
     {% if joined_events %}
-        <h1>Here are the events that you have signed up for:</h1>
-        {% for event in joined_events %}
-            <li>
-                <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-            </li>
-        {% endfor %}
+        <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+            <h1 class="text-center mb-5 mt-3">Here are the events that you have signed up for:</h1>
+            <ul class="list-group w-75">
+                {% for event in joined_events %}
+                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
+                        <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% else %}
-        <h1>You have not joined any events</h1>
+        <h1 class="text-center mb-5 mt-3">You have not joined any events</h1>
     {% endif %}
     <br><br>
 </body>
