@@ -19,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
 from .models import EventForm, Event, EventStatus, HeadCount
+from .context_processors import user_group
 import requests
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group, Permission
@@ -137,7 +138,17 @@ class ShowPendingView(generic.ListView):
     context_object_name = "pending_events"
     paginate_by = 5  
     model = Event  
-    queryset = Event.objects.filter(event_status__exact=EventStatus.PENDING).order_by("-id").values()
+
+    # https://stackoverflow.com/questions/24725617/how-to-make-generic-listview-only-show-users-listing
+    # This link helped me realized I can use self.request
+    def get_queryset(self):
+        user_email = self.request.user.email
+        user_groups = user_group(self.request)
+        if "admin_users" in user_groups["user_groups"]:
+            return Event.objects.filter(event_status=EventStatus.PENDING).order_by("-id").values()
+        else:
+            return Event.objects.filter(event_status=EventStatus.PENDING,
+                                        event_email=user_email).order_by("-id").values()
 
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"

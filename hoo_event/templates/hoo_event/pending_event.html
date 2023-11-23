@@ -2,50 +2,33 @@
 
 {% block content %}
 {% if 'admin_users' in user_groups %}
-    <h1>These events are awaiting approval from admins.</h1>
-
-    <div id="pending-events-backend-container">    
-    {% if pending_events %}
-
-        {% for event in pending_events %}
-            <li id="pending-event-item-style">
-                <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-            </li>
-        {% endfor %}
-
+    {% if not pending_events %}
+        <h1>There are no pending events right now.</h1>
     {% else %}
-        <p style="text-align: center">No events are available.</p>
+        <h1>These events are awaiting approval from admins:</h1>
     {% endif %}
-
-    <br>
-    <br>
-     <a href="{% url 'hoo_event:index' %}" id="return-to-main-page">Go back to main page</a>
-
-     </div>
-
 {% else %}
-    <h1>If you have any pending events, they will be here.</h1>
-
-    <div id="pending-events-backend-container">
-    {% if pending_events %}
-
-        {% for event in pending_events %}
-            {% if event.event_email == user.email %}
-                <li id="pending-event-item-style">
-                    <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
-
+    {% if not pending_events %}
+        <h1>You have no pending events.</h1>
     {% else %}
-        <p style="text-align: center">No events are available.</p>
+        <h1>Here are your pending events:</h1>
     {% endif %}
-
-    <br>
-     <a href="{% url 'hoo_event:home' %}" id="return-to-main-page">Go back to main page</a>
-
-     </div>
 {% endif %}
+
+<div id="pending-events-backend-container">
+{% if pending_events %}
+    {% for event in pending_events %}
+        <li id="pending-event-item-style">
+            <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
+        </li>
+    {% endfor %}
+{% endif %}
+
+<br>
+<br>
+ <a href="{% url 'hoo_event:index' %}" id="return-to-main-page">Go back to main page</a>
+
+ </div>
 
 {% include "pagination.html" %}
 
