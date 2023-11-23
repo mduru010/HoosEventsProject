@@ -154,8 +154,12 @@ class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"
     context_object_name = "denied_events"
     paginate_by = 5  
-    model = Event  
-    queryset = Event.objects.filter(event_status__exact=EventStatus.DENIED).order_by("-id").values()
+    model = Event
+
+    def get_queryset(self):
+        user_email = self.request.user.email
+        return Event.objects.filter(event_status=EventStatus.DENIED,
+                                    event_email=user_email).order_by("-id").values()
 
 def approveEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)

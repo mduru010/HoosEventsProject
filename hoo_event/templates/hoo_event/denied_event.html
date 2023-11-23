@@ -3,8 +3,8 @@
 {% block content %}
 <body>
     <div class="m-3">
-        <h1 class="text-center mb-5 mt-3">Denied Events</h1>
         {% if denied_events %}
+            <h1 class="text-center mb-5 mt-3">Denied Events</h1>
             <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
                 <ul class="list-group w-75">
                 {% for event in denied_events %}
@@ -21,7 +21,7 @@
                 </ul>
             </div>
         {% else %}
-            <p style="text-align: center">No events are available.</p>
+            <h1 class="text-center mb-5 mt-3">You have no denied events</h1>
         {% endif %}
     </div>
 </body>
