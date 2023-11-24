@@ -7,6 +7,20 @@
 
         {% csrf_token %}
 
+        {# This source helped me display the errors: #}
+        {# https://stackoverflow.com/questions/56187339/how-to-display-form-errors-message-properly-in-django #}
+        {% if form.errors %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ field.errors|striptags }}</strong>
+                        <p>Your event currently starts on <u>{{ form.cleaned_data.event_start_time }}</u>
+                            and ends on <u>{{ form.cleaned_data.event_start_time }}</u>
+                        </p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <label for="event_title" class="form-label">What is this event called?</label><br>
         <input type="text" class="form-control" id="event_title" name="event_title" value="Hoos Hack"><br>
 
@@ -16,22 +30,13 @@
         <label for="event_description" class="form-label">Enter the Event Description</label><br>
         <input type="text" class="form-control" id="event_description" name="event_description" value="Welcome!"><br>
 
-        <label for="event_street_address" class="form-label">Enter The Street Address:</label><br> <!-- User enters the address-->
-        <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="85 Engineer's Way"><br>
-
-        <label for="event_city" class="form-label">Enter Your City:</label><br> <!-- User enters the address-->
-        <input type="text" class="form-control" id="event_city" name="event_city" value="Charlottesville"><br>
-
-        <label for="event_state" class="form-label">Enter Your State:</label><br>
-        <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br>
-
         {# I learn how to input date time in html from this source: #}
         {# https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local #}
         <label for="start_time" class="form-label">Event Start Time:</label><br>
         <input type="datetime-local" class="form-control" id="start_time" name="event_start_time"><br>
 
         <label for="end_time" class="form-label">Event End Time:</label><br>
-        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time"><br><br>
+        <input type="datetime-local" class="form-control" id="end_time" name="event_end_time"><br>
 
         <script>
             function setCurrentDateTime() {
@@ -46,6 +51,15 @@
             document.getElementById('start_time').value = setCurrentDateTime();
             document.getElementById('end_time').value = setCurrentDateTime();
         </script>
+
+        <label for="event_street_address" class="form-label">Enter The Street Address:</label><br>
+        <input type="text" class="form-control" id="event_street_address" name="event_street_address" value="85 Engineer's Way"><br>
+
+        <label for="event_city" class="form-label">Enter Your City:</label><br>
+        <input type="text" class="form-control" id="event_city" name="event_city" value="Charlottesville"><br>
+
+        <label for="event_state" class="form-label">Enter Your State:</label><br>
+        <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br><br>
         
         <input type="submit" value="Submit">
     </form>

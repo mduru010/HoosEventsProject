@@ -34,7 +34,7 @@ class EventForm(forms.Form):
         start = self.cleaned_data['event_start_time']
         end = self.cleaned_data['event_end_time']
         if start >= end:
-            raise ValidationError("Please enter a start time that is after the end time")
+            raise ValidationError("Please enter a start time that is before the end time")
         return state
 
 
