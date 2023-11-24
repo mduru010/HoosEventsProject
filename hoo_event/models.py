@@ -5,6 +5,7 @@ from enum import Enum
 
 # Create your models here.
 from django.contrib.auth.models import Group, Permission
+from django.core.exceptions import ValidationError
 
 regular_users, created = Group.objects.get_or_create(name ='regular_users')
 admin_users, created = Group.objects.get_or_create(name ='admin_users')
@@ -19,11 +20,22 @@ class EventForm(forms.Form):
     event_title = forms.CharField(max_length=100)
     event_description = forms.CharField(widget=forms.Textarea)
     event_capacity = forms.IntegerField()
+    event_start_time = forms.DateTimeField()
+    event_end_time = forms.DateTimeField()
     event_street_address = forms.CharField(max_length=100)
     event_city = forms.CharField(max_length=100)
     event_state = forms.CharField(max_length=100)
-    event_start_time = forms.DateTimeField()
-    event_end_time = forms.DateTimeField()
+
+
+    # This source helped validate user input
+    # https://stackoverflow.com/questions/8557885/validationerror-while-using-modelform-django
+    def clean_event_state(self):
+        state = self.cleaned_data['event_state']
+        start = self.cleaned_data['event_start_time']
+        end = self.cleaned_data['event_end_time']
+        if start >= end:
+            raise ValidationError("Please enter a start time that is after the end time")
+        return state
 
 
 class Event(models.Model):
