@@ -30,44 +30,42 @@
     <strong style="padding-left: 20px">End time: </strong>
     <p style="padding-left: 20px">{{ event.event_end_time }}</p>
     {% if 'admin_users' in user_groups %}
-
-      {% if event.event_status == "EventStatus.PENDING" %}
-      <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Approve"><br><br>
-      </form>
-      <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Deny"><br><br>
-      </form>
-      {% endif %}
-    {% elif user.email == event.event_email %}
         {% if event.event_status == "EventStatus.PENDING" %}
-      <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Approve"><br><br>
-      </form>
-      <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Deny"><br><br>
-      </form>
-      {% endif %}
+            <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Approve"><br><br>
+            </form>
+            <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Deny"><br><br>
+            </form>
+        {% endif %}
+    {% elif user.email == event.event_email %} {# Need to remove this elif block post beta #}
+        {% if event.event_status == "EventStatus.PENDING" %}
+            <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Approve"><br><br>
+            </form>
+            <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Deny"><br><br>
+            </form>
+        {% endif %}
     {% endif %}
+
     {% if event.event_status == "EventStatus.APPROVED" %}
+        <strong style="padding-left: 20px">Event capacity:</strong>
+        <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
         {% if not events_signed_up %}
-            <form action="{% url 'hoo_event:signUp' event.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Sign Up"><br><br>
-              </form>
+            <form style="padding-left: 20px" action="{% url 'hoo_event:signUp' event.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Sign Up"><br><br>
+            </form>
         {% else %}
-             <form action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
+             <form style="padding-left: 20px" action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
                  {% csrf_token %}
                  <input type="submit" value="Remove Sign Up"><br><br>
              </form>
-        {% endif %}
-        {% if event.event_email == user.email %}
-            <strong style="padding-left: 20px">Event capacity:</strong>
-            <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
         {% endif %}
     {% endif %}
     {% if user.email == event.event_email %}
