@@ -282,7 +282,6 @@ class SignUpTest(unittest.TestCase):
         client.login(username=self.admin_user.username, password='admin_password')
 
         response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
-
         self.assertEqual(response.status_code, 302)
 
         # check if this event correctly appears in pending
@@ -305,3 +304,29 @@ class SignUpTest(unittest.TestCase):
         # check that the signed up event got added to our list
         response = client.get(reverse('hoo_event:myEvents'))
         self.assertIn(self.new_event["event_title"], response.content.decode())
+
+    def test_sign_up_fail(self):
+
+        client = Client()
+        client2 = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+        client2.login(username=self.regular_user.username, password='regular_password')
+
+        # admin (client) creates the event
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # admin signs up
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # regular user (client2) signs up fail now as capacity has been reached
+        response = client2.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
