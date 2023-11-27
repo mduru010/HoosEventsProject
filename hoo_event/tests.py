@@ -234,3 +234,74 @@ class AdminUserTests(unittest.TestCase):
     def test_delete_all_test_events(self):
         Event.objects.filter(event_title="Test Event").delete()
         Event.objects.filter(event_title="test_event_creation").delete()
+
+
+class SignUpTest(unittest.TestCase):
+    def setUp(self):
+        self.regular_username = f"unique_regular_user_{int(time.time())}{random.randrange(20000)}"
+        self.regular_user = User.objects.create_user(
+            username=self.regular_username,
+            password='regular_password'
+        )
+
+        # Create an admin user with a unique username
+        self.admin_username = f"unique_admin_user_{int(time.time())}{random.randrange(20000)}"
+        self.admin_user = User.objects.create_user(
+            username=self.admin_username,
+            password='admin_password'
+        )
+        admin_users_group, created = Group.objects.get_or_create(name='admin_users')
+        self.admin_user.groups.add(admin_users_group)
+
+        event_title = f"Hoos Hack {int(time.time())}"
+        year = 2023
+        month = 12
+        day = 10
+        hours = 12
+        minutes = 10
+
+        self.new_event = {"event_title": event_title,
+                     "event_capacity": 1,
+                     "event_description": "Welcome!",
+                     "event_start_time": datetime(year, month, day, hours, minutes),
+                     "event_end_time": datetime(year, month, day, hours, minutes+1),
+                     "event_street_address": "85 Engineer's Way",
+                     "event_city": "Charlottesville",
+                     "event_state": "Virginia"}
+
+    def tearDown(self):
+        # delete the created users
+        User.objects.filter(username__exact=self.regular_username).delete()
+        User.objects.filter(username__exact=self.admin_username).delete()
+
+        Event.objects.filter(event_title__exact=self.new_event["event_title"]).delete()
+
+    def test_sign_up_success(self):
+
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+
+        self.assertEqual(response.status_code, 302)
+
+        # check if this event correctly appears in pending
+        response = client.get(reverse('hoo_event:pending'))
+        self.assertIn('Hoos Hack', response.content.decode())
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent',  kwargs={'event_id' : event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # sign up
+        response = client.get(reverse('hoo_event:event', kwargs={'event_id': event_id}))
+        self.assertIn('Sign Up', response.content.decode())
+
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # check that the signed up event got added to our list
+        response = client.get(reverse('hoo_event:myEvents'))
+        self.assertIn(self.new_event["event_title"], response.content.decode())
