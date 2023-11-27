@@ -40,17 +40,6 @@
                 <input type="submit" value="Deny"><br><br>
             </form>
         {% endif %}
-    {% elif user.email == event.event_email %} {# Need to remove this elif block post beta #}
-        {% if event.event_status == "EventStatus.PENDING" %}
-            <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Approve"><br><br>
-            </form>
-            <form style="padding-left: 20px" action="{% url 'hoo_event:denyEvent' event.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Deny"><br><br>
-            </form>
-        {% endif %}
     {% endif %}
 
     {% if event.event_status == "EventStatus.APPROVED" %}
