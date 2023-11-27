@@ -330,3 +330,19 @@ class SignUpTest(unittest.TestCase):
         response = client2.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
         self.assertEqual(response.status_code, 302)
         self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
+
+    def test_sign_up_pending(self):
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        # admin (client) creates the event
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+
+        # sign up without approving
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
