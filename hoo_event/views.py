@@ -175,7 +175,7 @@ def denyEvent(request, event_id):
 
 def signUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    if current_event.event_capacity < current_event.event_full_capacity:
+    if current_event.event_capacity < current_event.event_full_capacity and current_event.event_status == "EventStatus.APPROVED":
         current_event.event_capacity += 1
         current_event.save()
 

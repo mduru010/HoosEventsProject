@@ -286,7 +286,7 @@ class SignUpTest(unittest.TestCase):
 
         # check if this event correctly appears in pending
         response = client.get(reverse('hoo_event:pending'))
-        self.assertIn('Hoos Hack', response.content.decode())
+        self.assertIn(self.new_event["event_title"], response.content.decode())
 
         # get the event id and approve it
         event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
