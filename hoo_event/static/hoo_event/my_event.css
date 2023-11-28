@@ -1,0 +1,28 @@
+h1 {
+    text-align: center;
+    font-family: "Montserrat";
+    background-image: none;
+    padding: 5px;
+}
+
+
+.joined-events-div-section {
+    text-align: center;
+    display: flex;
+    /* flex-direction: row;
+    justify-content: center;
+    align-items: center; */
+    /* background-color: aquamarine; */
+    /* background-color: blue; */
+}
+
+.card {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    /* background-color: red; */
+}
+
+#recent-event-page-specs {
+    padding-right: 60px;
+}
