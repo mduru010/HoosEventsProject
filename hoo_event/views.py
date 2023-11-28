@@ -186,11 +186,12 @@ def signUpEvent(request, event_id):
 
 def removeSignUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    current_event.event_capacity -= 1
-    current_event.save()
+    signed_up = HeadCount.objects.filter(user_email=request.user.email, event=current_event)
+    if signed_up:
+        current_event.event_capacity -= 1
+        current_event.save()
+        signed_up.delete()
 
-    current_head_count = get_object_or_404(HeadCount, user_email=request.user.email, event=current_event)
-    current_head_count.delete()
     return HttpResponseRedirect(reverse('hoo_event:home'))
 
 def showMyEvent(request):
