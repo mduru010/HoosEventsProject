@@ -241,14 +241,16 @@ class SignUpTest(unittest.TestCase):
         self.regular_username = f"unique_regular_user_{int(time.time())}{random.randrange(20000)}"
         self.regular_user = User.objects.create_user(
             username=self.regular_username,
-            password='regular_password'
+            password='regular_password',
+            email='regular_email'
         )
 
         # Create an admin user with a unique username
         self.admin_username = f"unique_admin_user_{int(time.time())}{random.randrange(20000)}"
         self.admin_user = User.objects.create_user(
             username=self.admin_username,
-            password='admin_password'
+            password='admin_password',
+            email='admin_email'
         )
         admin_users_group, created = Group.objects.get_or_create(name='admin_users')
         self.admin_user.groups.add(admin_users_group)
@@ -346,3 +348,49 @@ class SignUpTest(unittest.TestCase):
         response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
         self.assertEqual(response.status_code, 302)
         self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
+
+    def test_remove_sign_up(self):
+
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent',  kwargs={'event_id' : event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # sign up
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # remove sign up
+        response = client.post(reverse('hoo_event:removeSignUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # check that the event is not in there
+        joined_events = Event.objects.filter(headcount__user_email__exact=self.admin_user.email)
+        self.assertFalse(joined_events)
+
+    def test_remove_sign_up_without_sign_up(self):
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # remove sign up
+        response = client.post(reverse('hoo_event:removeSignUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # check that the event is not in there
+        joined_events = Event.objects.filter(headcount__user_email__exact=self.admin_user.email)
+        self.assertFalse(joined_events)
