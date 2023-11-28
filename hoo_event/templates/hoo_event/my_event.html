@@ -3,19 +3,11 @@
 {% block content %}
 <body>
     {% if host_events %}
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
         <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
             <h1  class="text-center mb-5 mt-3">Here are the events you are hosting:</h1>
             <ul class="list-group w-75">
                 {% for event in host_events %}
-<<<<<<< Updated upstream
-                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
-                        <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-                    </li>
-=======
                     <!-- <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
                         <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
                     </li> -->
@@ -31,7 +23,6 @@
                             <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
                         </div>
                     </div>
->>>>>>> Stashed changes
                 {% endfor %}
             </ul>
         </div>
@@ -44,11 +35,6 @@
             <h1 class="text-center mb-5 mt-3">Here are the events that you have signed up for:</h1>
             <ul class="list-group w-75">
                 {% for event in joined_events %}
-<<<<<<< Updated upstream
-                    <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
-                        <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-                    </li>
-=======
                     <!-- <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
                         <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
                     </li> -->
@@ -65,10 +51,6 @@
                         </div>
                     </div>
 
-
-
-
->>>>>>> Stashed changes
                 {% endfor %}
             </ul>
         </div>
