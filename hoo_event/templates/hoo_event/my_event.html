@@ -4,27 +4,77 @@
 <body>
     {% if host_events %}
 
-        <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+        <div id="backend-container" class="grid-container">
             <h1  class="text-center mb-5 mt-3">Here are the events you are hosting:</h1>
-            <ul class="list-group w-75">
                 {% for event in host_events %}
                     <!-- <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
                         <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
                     </li> -->
 
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top"
-                            src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
-                            alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ event.event_title }}</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                                content.</p>
-                            <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                    <!-- <div class="row">
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top"
+                                    src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ event.event_title }}</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                        card's
+                                        content.</p>
+                                    <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card" style="width: 18rem; margin: 2px;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
-            </ul>
         </div>
     {% else %}
         <h1 class="text-center mb-5 mt-3">You are not hosting any events</h1>
@@ -33,13 +83,12 @@
     {% if joined_events %}
         <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
             <h1 class="text-center mb-5 mt-3">Here are the events that you have signed up for:</h1>
-            <ul class="list-group w-75">
                 {% for event in joined_events %}
                     <!-- <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
                         <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
                     </li> -->
 
-                    <div class="card" style="width: 18rem;">
+                    <!-- <div class="card" style="width: 18rem;">
                         <img class="card-img-top"
                             src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
                             alt="Card image cap">
@@ -49,10 +98,57 @@
                                 content.</p>
                             <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
                         </div>
+                    </div> -->
+
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card" style="width: 18rem; margin: 5px;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+                                        alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.event_title }}</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                            card's
+                                            content.</p>
+                                        <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 {% endfor %}
-            </ul>
         </div>
     {% else %}
         <h1 class="text-center mb-5 mt-3">You have not joined any events</h1>
