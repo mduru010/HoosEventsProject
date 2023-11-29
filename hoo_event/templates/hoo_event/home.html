@@ -26,6 +26,9 @@
 {% block content %}
   <body>
     <h1>Welcome to Hoo Events, {{ user.username }}!</h1>
+    <div class="m-3" style="text-align: center;">
+        <a class="btn text-white" href="{% url 'hoo_event:random' %}">Go to a random event!</a>
+    </div>
     <div id="map"></div>
 
     <!-- 

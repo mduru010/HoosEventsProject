@@ -25,4 +25,7 @@ urlpatterns = [
     path('event/<int:event_id>/update', views.updateEvent, name="updateEvent"),
     path('event/<int:event_id>/delete', views.deleteEvent, name="deleteEvent"),
     path('googled45417b2986febe5.html/', TemplateView.as_view(template_name="googled45417b2986febe5.html"), name="g-verification"),
+
+    # random event
+    path('random/', views.randomEvent, name='random'),
 ]

@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 from django.core.serializers import serialize
+from random import randrange
 # import googlemaps
 
 
@@ -272,20 +273,17 @@ def deleteEvent(request, event_id):
     current_event.delete()
     return HttpResponseRedirect(reverse('hoo_event:home'))
 
+def randomEvent(request):
+    """
+    Get a random APPROVED event
+    """
+    all_approved = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
+    random_event_id = all_approved[randrange(len(all_approved))].id
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    current_event = get_object_or_404(Event, pk=random_event_id)
+    user_email = str(request.user.email) if request.user.is_authenticated else None
+    events_signed_up = HeadCount.objects.filter(event__exact=current_event,
+                                                user_email__exact=user_email)
+    return redirect(reverse('hoo_event:event', kwargs= {'event_id': random_event_id}),
+                    context={'event': current_event, 'events_signed_up': events_signed_up})
 
