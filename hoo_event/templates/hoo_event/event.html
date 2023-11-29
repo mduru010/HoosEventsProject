@@ -30,6 +30,23 @@
     <strong style="padding-left: 20px">End time: </strong>
     <p style="padding-left: 20px">{{ event.event_end_time }}</p>
 
+    <!-- absolute path url stackoverflow: https://stackoverflow.com/questions/2882490/how-to-get-the-current-url-within-a-django-template -->
+    <!-- javascript for copying link: https://stackoverflow.com/questions/68834848/how-to-copy-variable-to-clipboard-in-django-template -->
+    <p style="padding-left: 20px">
+    <button class="btn btn-secondary" onclick="CopyText()">Copy Link</button>
+    <input style="text-align:center; visibility: hidden" type="url" value="{{ request.build_absolute_uri }}" id="yourtext">
+
+    <script>
+        function CopyText() {
+            var text = document.getElementById('yourtext');
+            text.style.visibility = 'visible';
+            text.select();
+            document.execCommand('copy');
+            text.style.visibility = 'hidden';
+        }
+    </script>
+    </p>
+
     {% if 'admin_users' in user_groups %}
         {% if event.event_status == "EventStatus.PENDING" %}
             <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
