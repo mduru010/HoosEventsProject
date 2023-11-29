@@ -121,8 +121,9 @@ def addEvent(request):
 
 def event(request, event_id):
     current_event = get_object_or_404(Event, pk=event_id)
+    user_email = str(request.user.email) if request.user.is_authenticated else None
     events_signed_up = HeadCount.objects.filter(event__exact=current_event,
-                                                user_email__exact=request.user.email)
+                                                user_email__exact=user_email)
     return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
 
 class ShowRecentView(generic.ListView):
