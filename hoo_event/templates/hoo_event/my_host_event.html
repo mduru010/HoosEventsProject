@@ -2,12 +2,12 @@
 
 {% block content %}
 <body>
-    {% if joined_events %}
+    {% if host_events %}
         <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
-            <h1 class="text-center mb-5 mt-3">Here are the events that you have signed up for:</h1>
+            <h1 class="text-center mb-5 mt-3">Here are the events that you are hosting:</h1>
             <div class="container">
                 <div class="row">
-                    {% for event in joined_events %}
+                    {% for event in host_events %}
                         <div class="col">
                             <div class="card" style="width: 18rem; margin: 5px;">
                                 <img class="card-img-top"
@@ -27,8 +27,8 @@
             </div>
         </div>
     {% else %}
-        <h1 class="text-center mb-5 mt-3">You have not joined any events</h1>
-    {% endif %}
+        <h1 class="text-center mb-5 mt-3">You are not hosting any events</h1>
+    {%  endif %}
     <br><br>
 </body>
 

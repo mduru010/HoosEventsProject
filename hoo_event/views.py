@@ -195,13 +195,16 @@ def removeSignUpEvent(request, event_id):
 
     return HttpResponseRedirect(reverse('hoo_event:home'))
 
-def showMyEvent(request):
+def showMyHostEvent(request):
     host_events = Event.objects.filter(event_email__exact=request.user.email,
                                        event_status__exact=EventStatus.APPROVED)
+    return render(request, 'my_host_event.html', {'host_events': host_events})
+
+def showMyEvent(request):
     # I learnt how to query foreign key from here:
     # https://stackoverflow.com/questions/15507171/django-filter-query-foreign-key
     joined_events = Event.objects.filter(headcount__user_email__exact=request.user.email)
-    return render(request, 'my_event.html', {'host_events': host_events, 'joined_events': joined_events})
+    return render(request, 'my_event.html', {'joined_events': joined_events})
 
 def editEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
