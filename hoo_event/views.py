@@ -129,7 +129,7 @@ def event(request, event_id):
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
     context_object_name = "latest_events"
-    paginate_by = 5
+    paginate_by = 4
     model = Event  
     queryset = Event.objects.filter(event_status=EventStatus.APPROVED).order_by("-id")
     
@@ -137,7 +137,7 @@ class ShowRecentView(generic.ListView):
 class ShowPendingView(generic.ListView):
     template_name = "hoo_event/pending_event.html"
     context_object_name = "pending_events"
-    paginate_by = 5  
+    paginate_by = 4
     model = Event  
 
     # https://stackoverflow.com/questions/24725617/how-to-make-generic-listview-only-show-users-listing
@@ -154,7 +154,7 @@ class ShowPendingView(generic.ListView):
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"
     context_object_name = "denied_events"
-    paginate_by = 5  
+    paginate_by = 4 
     model = Event
 
     def get_queryset(self):
