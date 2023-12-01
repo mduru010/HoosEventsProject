@@ -11,7 +11,7 @@
                     {% if 'admin_users' in user_groups %}
                         <div class="col">
                             <div class="card" style="width: 14rem; height: 400px; margin: 0.5rem; ">
-                                <p class="emoji" style="font-size: 5em; display: block; margin: 0 auto;">{{ event.get_event_category_display}}</p>
+                                    {% include "emoji_dict.html" %}
                                 <div class="card-body">
                                     <h5 class="card-title">{{ event.event_title }}</h5>
                                     <p class="card-text">{{ event.event_description }}</p>
@@ -24,7 +24,7 @@
                     {% elif event.event_email == user.email %}
                         <div class="col">
                             <div class="card" style="width: 14rem; height: 400px; margin: 0.5rem; ">
-                                <p class="emoji" style="font-size: 5em; display: block; margin: 0 auto;">{{ event.get_event_category_display}}</p>
+                                    {% include "emoji_dict.html" %}
                                 <div class="card-body">
                                     <h5 class="card-title">{{ event.event_title }}</h5>
                                     <p class="card-text">{{ event.event_description }}</p>
