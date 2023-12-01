@@ -69,6 +69,7 @@ def addEvent(request):
             event_state = form.cleaned_data['event_state']
             event_start_time = form.cleaned_data['event_start_time']
             event_end_time = form.cleaned_data['event_end_time']
+            event_category = form.cleaned_data['event_category']
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -110,7 +111,8 @@ def addEvent(request):
                 event_status = EventStatus.PENDING,
                 event_email = request.user.email,
                 event_capacity=0,
-                event_full_capacity=event_capacity
+                event_full_capacity=event_capacity,
+                event_category = event_category
             )
 
             new_event.save()

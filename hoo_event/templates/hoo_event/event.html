@@ -29,6 +29,10 @@
     <p style="padding-left: 20px">{{ event.event_start_time }}</p>
     <strong style="padding-left: 20px">End time: </strong>
     <p style="padding-left: 20px">{{ event.event_end_time }}</p>
+    <strong style="padding-left: 20px">Event Category: </strong>
+    {# Choicefield display value: #}
+    {# https://stackoverflow.com/questions/4320679/django-display-choice-value #}
+    <p style="padding-left: 20px">{{ event.get_event_category_display }}</p>
 
     <!-- absolute path url stackoverflow: https://stackoverflow.com/questions/2882490/how-to-get-the-current-url-within-a-django-template -->
     <!-- javascript for copying link: https://stackoverflow.com/questions/68834848/how-to-copy-variable-to-clipboard-in-django-template -->
