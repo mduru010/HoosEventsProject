@@ -16,9 +16,10 @@ class EventStatus(Enum):
     DENIED = 3
 
 emojis = [
-        ('1', '🍔'),
-        ('2', '🎉'),
-        ('3', '🏟️')
+        ('1', '💡'),
+        ('2', '🍔'),
+        ('3', '🎉'),
+        ('4', '🏟️')
     ]
 
 # Create your models here.
