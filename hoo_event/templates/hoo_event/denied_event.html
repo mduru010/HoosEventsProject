@@ -2,10 +2,9 @@
 
 {% block content %}
 <body>
-    <div class="m-3">
-        {% if denied_events %}
-        <h1 class="text-center mb-5 mt-3">Denied Events</h1>
-        <div id="backend-container" class="container">
+    {% if denied_events %}
+        <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+            <h1 class="text-center mb-5 mt-3">Denied Events</h1>
             <div class="container">
                 <div class="row">
                 {% for event in denied_events %}
@@ -41,14 +40,14 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-                </ul>
+                </div>
             </div>
-        {% else %}
-            <h1 class="text-center mb-5 mt-3">You have no denied events</h1>
-        {% endif %}
-    </div>
-</body>
+        </div>
+        {% include "pagination.html" %}
 
-{% include "pagination.html" %}
+    {% else %}
+        <h1 class="text-center mb-5 mt-3">You have no denied events</h1>
+    {% endif %}
+</body>
 
 {% endblock %}

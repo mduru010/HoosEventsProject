@@ -27,11 +27,11 @@
                     </div>
 
         </div>
+        {% include "pagination.html" %}
+        
     {% else %}
         <p style="text-align: center">No events are available.</p>
     {% endif %}
 </div>
-
-{% include "pagination.html" %}
 
 {% endblock %}
