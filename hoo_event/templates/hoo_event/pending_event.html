@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
+{% block additional_styles %}
+   <style>
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        border-radius: 30px;
+        padding: 15px;
+        }
+
+    </style>
+{% endblock %}
+
 {% block content %}
 {% if 'admin_users' in user_groups %}
     {% if not pending_events %}
-        <h1 class="text-center mb-5 mt-3">There are no pending events right now.</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">There are no pending events right now.</h1>
     {% else %}
-        <h1 class="text-center mb-5 mt-3">These events are awaiting approval from admins:</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">These events are awaiting approval from admins:</h1>
     {% endif %}
 {% else %}
     {% if not pending_events %}
-        <h1 class="text-center mb-5 mt-3">You have no pending events.</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">You have no pending events.</h1>
     {% else %}
-        <h1 class="text-center mb-5 mt-3">Here are your pending events:</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">Here are your pending events:</h1>
     {% endif %}
 {% endif %}
 

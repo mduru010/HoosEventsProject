@@ -1,8 +1,24 @@
 {% extends 'base.html' %}
 
+{% block additional_styles %}
+   <style>
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        border-radius: 30px;
+        padding: 15px;
+        }
+
+
+
+    </style>
+{% endblock %}
+
 {% block content %}
 <div class="m-3">
-    <h1 class="text-center mb-5 mt-3">Recently Added Events</h1>
+    <h1 class="text-center mb-5 mt-3" id="main-title-text">Recently Added Events</h1>
     {% if latest_events %}
         <div id="backend-container">
                     <div class="container">
