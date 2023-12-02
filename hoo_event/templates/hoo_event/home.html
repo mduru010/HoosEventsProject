@@ -19,15 +19,32 @@
         margin: 0;
         padding: 0;
         }
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        border-radius: 30px;
+        padding: 15px;
+        margin-top: 25px;
+        }
+
+        #subtitle-for-home-page {
+            text-decoration: underline;
+            font-size: 30px;
+            font-weight: bolder;
+            font-family: "Montserrat";
+        }
+
     </style>
 {% endblock %}
 
 
 {% block content %}
   <body>
-    <h1>Welcome to Hoo Events, {{ user.username }}!</h1>
+    <h1 id="main-title-text">Welcome to Hoo Events, {{ user.username }}!</h1>
     <div class="m-3" style="text-align: center;">
-        <a class="btn text-white" href="{% url 'hoo_event:random' %}">Go to a random event!</a>
+        <a class="btn text-white" href="{% url 'hoo_event:random' %}" id="subtitle-for-home-page">Go to a random event!</a>
     </div>
     <div id="map"></div>
 
