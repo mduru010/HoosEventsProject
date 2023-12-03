@@ -83,6 +83,7 @@ class EventModelTest(unittest.TestCase):
             'event_state': 'CA',
             'event_start_time': start_time,  # Use valid date and time
             'event_end_time': end_time,  # Use valid date and time
+            'event_category': 1,
         }
 
         response = client.post(reverse('hoo_event:addNewEvent'), event_data)
@@ -160,7 +161,8 @@ class AdminUserTests(unittest.TestCase):
             event_street_address="123 Main St",
             event_city="New York",
             event_state="NY",
-            event_status=EventStatus.PENDING
+            event_status=EventStatus.PENDING,
+            event_category=1,
         )
 
         # Add the admin user to the admin_users group
@@ -225,7 +227,7 @@ class AdminUserTests(unittest.TestCase):
         self.assertIn('Deny', response.content.decode())
 
         # Simulate denying the event by posting the denial form
-        response = self.client.post(reverse('hoo_event:denyEvent', args=[self.event.id]))
+        response = self.client.post(reverse('hoo_event:denyEvent', args=[self.event.id]), {"event_deny_reason": "Sorry!"})
 
         # Check that the event status is now "DENIED"
         self.event.refresh_from_db()
@@ -263,13 +265,15 @@ class SignUpTest(unittest.TestCase):
         minutes = 10
 
         self.new_event = {"event_title": event_title,
-                     "event_capacity": 1,
-                     "event_description": "Welcome!",
-                     "event_start_time": datetime(year, month, day, hours, minutes),
-                     "event_end_time": datetime(year, month, day, hours, minutes+1),
-                     "event_street_address": "85 Engineer's Way",
-                     "event_city": "Charlottesville",
-                     "event_state": "Virginia"}
+                         "event_capacity": 1,
+                         "event_description": "Welcome!",
+                         "event_start_time": datetime(year, month, day, hours, minutes),
+                         "event_end_time": datetime(year, month, day, hours, minutes+1),
+                         "event_street_address": "85 Engineer's Way",
+                         "event_city": "Charlottesville",
+                         "event_state": "Virginia",
+                         "event_category": 1,
+                          }
 
     def tearDown(self):
         # delete the created users
