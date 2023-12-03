@@ -50,7 +50,7 @@
 
     <div class="event-submission-form-styling">
     <div class="black-overlay-div">
-    <form class="m-3" action="{% url 'hoo_event:denyEvent' %}" method="post">
+    <form class="m-3" action="{% url 'hoo_event:denyEvent' event_id %}" method="post">
 
         {% csrf_token %}
 

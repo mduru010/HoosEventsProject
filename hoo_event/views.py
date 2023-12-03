@@ -127,7 +127,11 @@ def event(request, event_id):
     user_email = str(request.user.email) if request.user.is_authenticated else None
     events_signed_up = HeadCount.objects.filter(event__exact=current_event,
                                                 user_email__exact=user_email)
-    return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
+    deny_reason = DenyReason.objects.filter(event=current_event)
+    deny_reason = deny_reason[0] if deny_reason else None
+    return render(request, 'event.html', {'event': current_event,
+                                          'events_signed_up': events_signed_up,
+                                          'denied': deny_reason})
 
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
@@ -172,7 +176,7 @@ def approveEvent(request, event_id):
     return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def denyReason(request, event_id):
-    return render(request, 'deny_reason.html')
+    return render(request, 'deny_reason.html', {'event_id': event_id})
 
 def denyEvent(request, event_id):
 

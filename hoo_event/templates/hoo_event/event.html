@@ -33,6 +33,10 @@
     {# Choicefield display value: #}
     {# https://stackoverflow.com/questions/4320679/django-display-choice-value #}
     <p style="padding-left: 20px">{{ event.get_event_category_display }}</p>
+    {% if user.is_authenticated %}
+        <strong style="padding-left: 20px">Event capacity:</strong>
+        <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
+    {% endif %}
 
     <!-- absolute path url stackoverflow: https://stackoverflow.com/questions/2882490/how-to-get-the-current-url-within-a-django-template -->
     <!-- javascript for copying link: https://stackoverflow.com/questions/68834848/how-to-copy-variable-to-clipboard-in-django-template -->
@@ -53,43 +57,54 @@
 
     {% if 'admin_users' in user_groups %}
         {% if event.event_status == "EventStatus.PENDING" %}
-            <form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Approve"><br><br>
-            </form>
-            <form style="padding-left: 20px" action="{% url 'hoo_event:denyReason' event.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Deny"><br><br>
-            </form>
+            <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 100px)">
+                <div class="grid-item" style="z-index: 1"><form style="padding-left: 20px" action="{% url 'hoo_event:approveEvent' event.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-success" value="Approve"><br><br>
+                </form></div>
+                <form style="padding-left: 20px" action="{% url 'hoo_event:denyReason' event.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Deny"><br><br>
+                </form>
+            </div>
         {% endif %}
     {% endif %}
-    
-    
 
       {% if event.event_status == "EventStatus.APPROVED" %}
-          <strong style="padding-left: 20px">Event capacity:</strong>
-          <p style="padding-left: 20px">{{ event.event_capacity }} / {{ event.event_full_capacity }}</p>
           {% if user.is_authenticated %}
-          {% if not events_signed_up %}
-              <form style="padding-left: 20px" action="{% url 'hoo_event:signUp' event.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Sign Up"><br><br>
-              </form>
-          {% else %}
-              <form style="padding-left: 20px" action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Remove Sign Up"><br><br>
-              </form>
+              {% if not events_signed_up %}
+
+                  <form style="padding-left: 20px" action="{% url 'hoo_event:signUp' event.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="submit" class="btn btn-success" value="Sign Up"><br><br>
+                  </form>
+
+              {% else %}
+                  <form style="padding-left: 20px" action="{% url 'hoo_event:removeSignUp' event.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="submit" class="btn btn-danger" value="Remove Sign Up"><br><br>
+                  </form>
+              {% endif %}
           {% endif %}
       {% endif %}
 
       {% if user.email == event.event_email %}
           {% if event.event_status == "EventStatus.PENDING" %}
-                <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:editEvent' event.id %}">Click here to Edit your Event</a>
+              <div style="padding-left: 20px"><button type="button" class="btn btn-info">
+                  <a class="text-white" href="{% url 'hoo_event:editEvent' event.id %}">Edit this Event</a>
+              </button></div>
           {% endif %}
-          <br><br>
-          <a class="text-white" style="padding-left: 20px" href="{% url 'hoo_event:deleteEvent' event.id %}">Click here to Delete this Event</a>
-      {% endif %}
+          <br>
+          {% if event.event_status == "EventStatus.DENIED" %}
+              <div style="padding-left: 20px"><div class="alert alert-danger"style="max-width: 500px">
+                  <strong>Denied by: {{denied.admin_email}} </strong>
+                  <p>"{{ denied.event_deny_reason }}"</p>
+              </div></div>
+          {% endif %}
+              <div style="padding-left: 20px"><button type="button" class="btn btn-danger">
+                  <a class="text-white" href="{% url 'hoo_event:deleteEvent' event.id %}">Delete this Event</a>
+              </button></div>
+          <br>
     {% endif %}
 
     <div id="map"></div>
