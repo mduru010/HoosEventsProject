@@ -36,8 +36,7 @@ def main(request):
     regular_users = Group.objects.get(name='regular_users')
     admin_users = Group.objects.get(name='admin_users')
 
-    # if request.user.email == "cs3240.super@gmail.com":
-    if request.user.email == "hooevents22@gmail.com":
+    if request.user.email == "cs3240.super@gmail.com":
         admin_users.user_set.add(request.user)
     if not request.user.groups.filter(name='admin_users').exists():
         regular_users.user_set.add(request.user)
