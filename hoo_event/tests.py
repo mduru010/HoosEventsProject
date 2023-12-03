@@ -115,7 +115,10 @@ class EventModelTest(unittest.TestCase):
         )
         client.login(username=user.username, password="testpassword")
 
-        current_event = get_object_or_404(Event, id=450)
+        all_approved = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
+        random_event_id = all_approved[random.randrange(len(all_approved))].id
+
+        current_event = get_object_or_404(Event, id=random_event_id)
         response = client.get(reverse('hoo_event:event', args=[current_event.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(current_event.event_title in response.content.decode())

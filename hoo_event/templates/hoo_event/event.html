@@ -55,6 +55,8 @@
     </script>
     </p>
 
+    {# I learnt how to use css grid from these links:#}
+    {# https://www.w3schools.com/css/css_grid.asp and https://developer.mozilla.org/en-US/docs/Web/CSS/repeat  #}
     {% if 'admin_users' in user_groups %}
         {% if event.event_status == "EventStatus.PENDING" %}
             <div class="grid-container" style="display: grid; grid-template-columns: repeat(2, 100px)">
