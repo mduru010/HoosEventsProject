@@ -108,18 +108,18 @@
         <label for="event_state" class="form-label">Enter Your State:</label><br>
         <input type="text" class="form-control" id="event_state" name="event_state" value="Virginia"><br><br>
 
-        <!-- {# Rendering fields manually: #}
+        {# Rendering fields manually: #}
         {# https://docs.djangoproject.com/en/4.2/topics/forms/ #}
         {{ form.non_field_errors }}
         <div class="form-label">
             {{ form.event_category.errors }}
             <label for="{{ form.event_category.id_for_label }}">Select Event Category:</label>
             {{ form.event_category }}
-        </div> -->
-
-        <div class="form-group">
-            {{ form.event_category }}
         </div>
+
+        <!-- <div class="form-group">
+            {{ form.event_category }}
+        </div> -->
         
         <input class="button-styling" type="submit" value="Submit">
     </form>
