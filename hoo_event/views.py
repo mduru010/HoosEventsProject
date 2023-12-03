@@ -18,7 +18,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
-from .models import EventForm, Event, EventStatus, HeadCount
+from .models import EventForm, Event, EventStatus, HeadCount, DenyReasonForm, DenyReason
 from .context_processors import user_group
 import requests
 from django.http import HttpResponseRedirect
@@ -171,10 +171,33 @@ def approveEvent(request, event_id):
     current_event.save()
     return HttpResponseRedirect(reverse('hoo_event:pending'))
 
+def denyReason(request, event_id):
+    return render(request, 'deny_reason.html')
+
 def denyEvent(request, event_id):
-    current_event = get_object_or_404(Event, id=event_id)
-    current_event.event_status = EventStatus.DENIED
-    current_event.save()
+
+    form = DenyReasonForm()
+    if request.method == 'POST':
+        form = DenyReasonForm(request.POST)
+        if form.is_valid():
+            event_deny_reason = form.cleaned_data['event_deny_reason']
+
+            # this part updates the event status
+            current_event = get_object_or_404(Event, id=event_id)
+            current_event.event_status = EventStatus.DENIED
+            current_event.save()
+
+            # this part creates the Model to hold the reason
+            reason = DenyReason.objects.create(
+                admin_email = request.user.email,
+                event = current_event,
+                event_deny_reason = event_deny_reason,
+            )
+            reason.save()
+            return HttpResponseRedirect(reverse('hoo_event:pending'))
+        else:
+            print(form.errors)
+
     return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def signUpEvent(request, event_id):
