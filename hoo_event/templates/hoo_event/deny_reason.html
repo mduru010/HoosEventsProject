@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block additional_styles %}
+   <style>
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        padding: 15px;
+        border-radius: 30px;
+        }
+
+      .black-overlay-div {
+        background-color: black;
+        padding: 15px;
+        border-radius: 30px;
+      }
+
+      .event-submission-form-styling {
+        font-family: "Montserrat";
+        font-weight: bolder;
+        /* background-color: black; */
+        padding-left: 20%;
+        padding-right: 20%;
+      }
+
+      .form-label {
+        color: white;
+      }
+
+      .form-control {
+        font-weight: bold;
+      }
+
+      .button-styling {
+        background-color: white;
+        color: black;
+        padding: 5px;
+        border-radius: 30px;
+        font-weight: 900;
+      }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="m-3">
+    <h1 id="main-title-text" class="m-3">Create New Event</h1>
+
+    <div class="event-submission-form-styling">
+    <div class="black-overlay-div">
+    <form class="m-3" action="{% url 'hoo_event:denyEvent' event_id %}" method="post">
+
+        {% csrf_token %}
+
+        <label for="event_deny_reason" class="form-label">Enter your reason for denying this Event:</label><br>
+        <input type="text" class="form-control" id="event_deny_reason" name="event_deny_reason" required><br>
+        <input class="button-styling" type="submit" value="Submit">
+    </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

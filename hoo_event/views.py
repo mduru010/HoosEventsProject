@@ -18,7 +18,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
 from django.conf import settings
-from .models import EventForm, Event, EventStatus, HeadCount
+from .models import EventForm, Event, EventStatus, HeadCount, DenyReasonForm, DenyReason
 from .context_processors import user_group
 import requests
 from django.http import HttpResponseRedirect
@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 from django.core.serializers import serialize
+from random import randrange
 # import googlemaps
 
 
@@ -68,6 +69,7 @@ def addEvent(request):
             event_state = form.cleaned_data['event_state']
             event_start_time = form.cleaned_data['event_start_time']
             event_end_time = form.cleaned_data['event_end_time']
+            event_category = form.cleaned_data['event_category']
 
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
@@ -109,7 +111,8 @@ def addEvent(request):
                 event_status = EventStatus.PENDING,
                 event_email = request.user.email,
                 event_capacity=0,
-                event_full_capacity=event_capacity
+                event_full_capacity=event_capacity,
+                event_category = event_category
             )
 
             new_event.save()
@@ -121,14 +124,19 @@ def addEvent(request):
 
 def event(request, event_id):
     current_event = get_object_or_404(Event, pk=event_id)
+    user_email = str(request.user.email) if request.user.is_authenticated else None
     events_signed_up = HeadCount.objects.filter(event__exact=current_event,
-                                                user_email__exact=request.user.email)
-    return render(request, 'event.html', {'event': current_event, 'events_signed_up': events_signed_up})
+                                                user_email__exact=user_email)
+    deny_reason = DenyReason.objects.filter(event=current_event)
+    deny_reason = deny_reason[0] if deny_reason else None
+    return render(request, 'event.html', {'event': current_event,
+                                          'events_signed_up': events_signed_up,
+                                          'denied': deny_reason})
 
 class ShowRecentView(generic.ListView):
     template_name = "hoo_event/recent_event.html"
     context_object_name = "latest_events"
-    paginate_by = 5
+    paginate_by = 4
     model = Event  
     queryset = Event.objects.filter(event_status=EventStatus.APPROVED).order_by("-id")
     
@@ -136,7 +144,7 @@ class ShowRecentView(generic.ListView):
 class ShowPendingView(generic.ListView):
     template_name = "hoo_event/pending_event.html"
     context_object_name = "pending_events"
-    paginate_by = 5  
+    paginate_by = 4
     model = Event  
 
     # https://stackoverflow.com/questions/24725617/how-to-make-generic-listview-only-show-users-listing
@@ -153,7 +161,7 @@ class ShowPendingView(generic.ListView):
 class ShowDeniedView(generic.ListView):
     template_name = "hoo_event/denied_event.html"
     context_object_name = "denied_events"
-    paginate_by = 5  
+    paginate_by = 4 
     model = Event
 
     def get_queryset(self):
@@ -167,15 +175,38 @@ def approveEvent(request, event_id):
     current_event.save()
     return HttpResponseRedirect(reverse('hoo_event:pending'))
 
+def denyReason(request, event_id):
+    return render(request, 'deny_reason.html', {'event_id': event_id})
+
 def denyEvent(request, event_id):
-    current_event = get_object_or_404(Event, id=event_id)
-    current_event.event_status = EventStatus.DENIED
-    current_event.save()
+
+    form = DenyReasonForm()
+    if request.method == 'POST':
+        form = DenyReasonForm(request.POST)
+        if form.is_valid():
+            event_deny_reason = form.cleaned_data['event_deny_reason']
+
+            # this part updates the event status
+            current_event = get_object_or_404(Event, id=event_id)
+            current_event.event_status = EventStatus.DENIED
+            current_event.save()
+
+            # this part creates the Model to hold the reason
+            reason = DenyReason.objects.create(
+                admin_email = request.user.email,
+                event = current_event,
+                event_deny_reason = event_deny_reason,
+            )
+            reason.save()
+            return HttpResponseRedirect(reverse('hoo_event:pending'))
+        else:
+            print(form.errors)
+
     return HttpResponseRedirect(reverse('hoo_event:pending'))
 
 def signUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    if current_event.event_capacity < current_event.event_full_capacity:
+    if current_event.event_capacity < current_event.event_full_capacity and current_event.event_status == "EventStatus.APPROVED":
         current_event.event_capacity += 1
         current_event.save()
 
@@ -186,20 +217,24 @@ def signUpEvent(request, event_id):
 
 def removeSignUpEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
-    current_event.event_capacity -= 1
-    current_event.save()
+    signed_up = HeadCount.objects.filter(user_email=request.user.email, event=current_event)
+    if signed_up:
+        current_event.event_capacity -= 1
+        current_event.save()
+        signed_up.delete()
 
-    current_head_count = get_object_or_404(HeadCount, user_email=request.user.email, event=current_event)
-    current_head_count.delete()
     return HttpResponseRedirect(reverse('hoo_event:home'))
 
-def showMyEvent(request):
+def showMyHostEvent(request):
     host_events = Event.objects.filter(event_email__exact=request.user.email,
                                        event_status__exact=EventStatus.APPROVED)
+    return render(request, 'my_host_event.html', {'host_events': host_events})
+
+def showMyEvent(request):
     # I learnt how to query foreign key from here:
     # https://stackoverflow.com/questions/15507171/django-filter-query-foreign-key
     joined_events = Event.objects.filter(headcount__user_email__exact=request.user.email)
-    return render(request, 'my_event.html', {'host_events': host_events, 'joined_events': joined_events})
+    return render(request, 'my_event.html', {'joined_events': joined_events})
 
 def editEvent(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
@@ -267,20 +302,17 @@ def deleteEvent(request, event_id):
     current_event.delete()
     return HttpResponseRedirect(reverse('hoo_event:home'))
 
+def randomEvent(request):
+    """
+    Get a random APPROVED event
+    """
+    all_approved = Event.objects.filter(event_status__exact=EventStatus.APPROVED)
+    random_event_id = all_approved[randrange(len(all_approved))].id
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    current_event = get_object_or_404(Event, pk=random_event_id)
+    user_email = str(request.user.email) if request.user.is_authenticated else None
+    events_signed_up = HeadCount.objects.filter(event__exact=current_event,
+                                                user_email__exact=user_email)
+    return redirect(reverse('hoo_event:event', kwargs= {'event_id': random_event_id}),
+                    context={'event': current_event, 'events_signed_up': events_signed_up})
 

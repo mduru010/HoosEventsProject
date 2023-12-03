@@ -15,6 +15,13 @@ class EventStatus(Enum):
     APPROVED = 2
     DENIED = 3
 
+emojis = [
+        ('1', '💡'),
+        ('2', '🍔'),
+        ('3', '🎉'),
+        ('4', '🏟️')
+    ]
+
 # Create your models here.
 class EventForm(forms.Form):
     event_title = forms.CharField(max_length=100)
@@ -25,6 +32,9 @@ class EventForm(forms.Form):
     event_street_address = forms.CharField(max_length=100)
     event_city = forms.CharField(max_length=100)
     event_state = forms.CharField(max_length=100)
+    # Form Styling Widgets
+    # https://medium.com/swlh/how-to-style-your-django-forms-7e8463aae4fa
+    event_category = forms.ChoiceField(choices=emojis, widget=forms.Select(attrs={'class': 'form-control'}))
 
 
     # This source helped validate user input
@@ -53,6 +63,11 @@ class Event(models.Model):
     event_capacity = models.PositiveIntegerField(default=0) # This one keeps track of the actual people who signed up
     event_full_capacity = models.PositiveIntegerField(default=1)
 
+    # ChoiceField Example
+    # https://stackoverflow.com/questions/24403075/django-choicefield
+    event_category = models.CharField(max_length=2, choices=emojis)
+
+
     def __str__(self):
         return self.event_title
 
@@ -63,3 +78,13 @@ class HeadCount(models.Model):
 
     def __str__(self):
         return f"{self.user_email} is signed up for {self.event.event_title}"
+
+
+class DenyReasonForm(forms.Form):
+    event_deny_reason = forms.CharField(widget=forms.Textarea)
+
+
+class DenyReason(models.Model):
+    admin_email = models.CharField(max_length=100)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event_deny_reason = models.TextField()

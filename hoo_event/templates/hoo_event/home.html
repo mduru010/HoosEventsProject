@@ -19,13 +19,33 @@
         margin: 0;
         padding: 0;
         }
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        border-radius: 30px;
+        padding: 15px;
+        margin-top: 25px;
+        }
+
+        #subtitle-for-home-page {
+            text-decoration: underline;
+            font-size: 30px;
+            font-weight: bolder;
+            font-family: "Montserrat";
+        }
+
     </style>
 {% endblock %}
 
 
 {% block content %}
   <body>
-    <h1>Welcome to Hoo Events, {{ user.username }}!</h1>
+    <h1 id="main-title-text">Welcome to Hoo Events, {{ user.username }}!</h1>
+    <div class="m-3" style="text-align: center;">
+        <a class="btn text-white" href="{% url 'hoo_event:random' %}" id="subtitle-for-home-page">Go to a random event!</a>
+    </div>
     <div id="map"></div>
 
     <!-- 
@@ -49,6 +69,8 @@
             let longitude = event["fields"].event_longitude;
             let latitude = event["fields"].event_latitude;
             let start_time = event["fields"].event_start_time;
+            let description = event["fields"].event_description;
+            let event_id = event["pk"];
             start_time = start_time.replace("T", " ");
             start_time = start_time.replace("Z", "");
             events.push({
@@ -56,6 +78,8 @@
                 longitude: longitude,
                 latitude: latitude,
                 start_time: start_time,
+                description: description,
+                event_id: event_id,
             });
             console.log(title);
             console.log(longitude);
@@ -88,8 +112,10 @@
                     type: "event",
                     title: event.event_title,
                     time: event.start_time,
+                    description: event.description,
+                    event_id: event.event_id,
                 });
-            };
+            }
 
             for(let i = 0; i < features.length; i++) {
                 const marker = new google.maps.Marker({
@@ -97,7 +123,10 @@
                     map: map,
                 });
                 marker.addListener("mouseover", () => {
-                    const contentString = '<b>' + features[i].title + '</b><br><br>' + features[i].time;
+                    const event_id = features[i].event_id;
+                    const contentString = `<a href="/hoo_event/event/${event_id}">` + features[i].title + '</a><br><br>'
+                                         + features[i].time + '<br><br>'
+                                         + features[i].description;
                     infoWindow.close();
                     infoWindow.setContent(contentString);
                     infoWindow.open(map, marker);

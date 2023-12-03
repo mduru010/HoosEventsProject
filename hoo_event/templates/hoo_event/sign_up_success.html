@@ -1,3 +1,27 @@
+{% extends 'base.html' %}
+
+{% block additional_styles %}
+   <style>
+      .error-message-styling {
+        margin-top: 20%;
+    text-align: center;
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-size: 30px;
+    color: white;
+      }
+
+      .error-message-styling a {
+        color: white;
+        background-color: black;
+        border-radius: 30px;
+        padding: 15px;
+      }
+
+    </style>
+{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +29,10 @@
     <title>Title</title>
 </head>
 <body>
-    <strong>Hooray! You signed up successfully!</strong>
-
-    <br><a href="{% url 'hoo_event:home' %}">Go back to main page</a><br><br>
+    <div class="error-message-styling">
+        <p>Hooray! You signed up successfully!</p>
+        <br><a href="{% url 'hoo_event:home' %}">Go back to main page</a><br><br>
+    </div>
 </body>
 </html>
+{% endblock %} 

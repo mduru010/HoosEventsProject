@@ -10,11 +10,13 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
     path('home/', views.home, name="home"),
     path('add/', views.addEvent, name="addNewEvent"),
+    path('my_host/', views.showMyHostEvent, name="myHostEvents"),
     path('my_event/', views.showMyEvent, name="myEvents"),
     path('recent/', views.ShowRecentView.as_view(), name="recent"),
     path('pending/', views.ShowPendingView.as_view(), name="pending"),
     path('denied/', views.ShowDeniedView.as_view(), name="denied"),
     path('event/<int:event_id>/approve', views.approveEvent, name="approveEvent"),
+    path('event/<int:event_id>/deny_reason', views.denyReason, name="denyReason"),
     path('event/<int:event_id>/deny', views.denyEvent, name="denyEvent"),
     path('event/<int:event_id>/register', views.signUpEvent, name="signUp"),
     path('event/<int:event_id>/deregister', views.removeSignUpEvent, name="removeSignUp"),
@@ -24,4 +26,7 @@ urlpatterns = [
     path('event/<int:event_id>/update', views.updateEvent, name="updateEvent"),
     path('event/<int:event_id>/delete', views.deleteEvent, name="deleteEvent"),
     path('googled45417b2986febe5.html/', TemplateView.as_view(template_name="googled45417b2986febe5.html"), name="g-verification"),
+
+    # random event
+    path('random/', views.randomEvent, name='random'),
 ]

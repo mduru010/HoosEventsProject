@@ -83,6 +83,7 @@ class EventModelTest(unittest.TestCase):
             'event_state': 'CA',
             'event_start_time': start_time,  # Use valid date and time
             'event_end_time': end_time,  # Use valid date and time
+            'event_category': 1,
         }
 
         response = client.post(reverse('hoo_event:addNewEvent'), event_data)
@@ -160,7 +161,8 @@ class AdminUserTests(unittest.TestCase):
             event_street_address="123 Main St",
             event_city="New York",
             event_state="NY",
-            event_status=EventStatus.PENDING
+            event_status=EventStatus.PENDING,
+            event_category=1,
         )
 
         # Add the admin user to the admin_users group
@@ -225,7 +227,7 @@ class AdminUserTests(unittest.TestCase):
         self.assertIn('Deny', response.content.decode())
 
         # Simulate denying the event by posting the denial form
-        response = self.client.post(reverse('hoo_event:denyEvent', args=[self.event.id]))
+        response = self.client.post(reverse('hoo_event:denyEvent', args=[self.event.id]), {"event_deny_reason": "Sorry!"})
 
         # Check that the event status is now "DENIED"
         self.event.refresh_from_db()
@@ -234,3 +236,165 @@ class AdminUserTests(unittest.TestCase):
     def test_delete_all_test_events(self):
         Event.objects.filter(event_title="Test Event").delete()
         Event.objects.filter(event_title="test_event_creation").delete()
+
+
+class SignUpTest(unittest.TestCase):
+    def setUp(self):
+        self.regular_username = f"unique_regular_user_{int(time.time())}{random.randrange(20000)}"
+        self.regular_user = User.objects.create_user(
+            username=self.regular_username,
+            password='regular_password',
+            email='regular_email'
+        )
+
+        # Create an admin user with a unique username
+        self.admin_username = f"unique_admin_user_{int(time.time())}{random.randrange(20000)}"
+        self.admin_user = User.objects.create_user(
+            username=self.admin_username,
+            password='admin_password',
+            email='admin_email'
+        )
+        admin_users_group, created = Group.objects.get_or_create(name='admin_users')
+        self.admin_user.groups.add(admin_users_group)
+
+        event_title = f"Hoos Hack {int(time.time())}"
+        year = 2023
+        month = 12
+        day = 10
+        hours = 12
+        minutes = 10
+
+        self.new_event = {"event_title": event_title,
+                         "event_capacity": 1,
+                         "event_description": "Welcome!",
+                         "event_start_time": datetime(year, month, day, hours, minutes),
+                         "event_end_time": datetime(year, month, day, hours, minutes+1),
+                         "event_street_address": "85 Engineer's Way",
+                         "event_city": "Charlottesville",
+                         "event_state": "Virginia",
+                         "event_category": 1,
+                          }
+
+    def tearDown(self):
+        # delete the created users
+        User.objects.filter(username__exact=self.regular_username).delete()
+        User.objects.filter(username__exact=self.admin_username).delete()
+
+        Event.objects.filter(event_title__exact=self.new_event["event_title"]).delete()
+
+    def test_sign_up_success(self):
+
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # check if this event correctly appears in pending
+        response = client.get(reverse('hoo_event:pending'))
+        self.assertIn(self.new_event["event_title"], response.content.decode())
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent',  kwargs={'event_id' : event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # sign up
+        response = client.get(reverse('hoo_event:event', kwargs={'event_id': event_id}))
+        self.assertIn('Sign Up', response.content.decode())
+
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # check that the signed up event got added to our list
+        response = client.get(reverse('hoo_event:myEvents'))
+        self.assertIn(self.new_event["event_title"], response.content.decode())
+
+    def test_sign_up_fail(self):
+
+        client = Client()
+        client2 = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+        client2.login(username=self.regular_user.username, password='regular_password')
+
+        # admin (client) creates the event
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # admin signs up
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # regular user (client2) signs up fail now as capacity has been reached
+        response = client2.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
+
+    def test_sign_up_pending(self):
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        # admin (client) creates the event
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+
+        # sign up without approving
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/fail', str(response))
+
+    def test_remove_sign_up(self):
+
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent',  kwargs={'event_id' : event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # sign up
+        response = client.post(reverse('hoo_event:signUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(f'/hoo_event/event/{event_id}/register/success', str(response))
+
+        # remove sign up
+        response = client.post(reverse('hoo_event:removeSignUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # check that the event is not in there
+        joined_events = Event.objects.filter(headcount__user_email__exact=self.admin_user.email)
+        self.assertFalse(joined_events)
+
+    def test_remove_sign_up_without_sign_up(self):
+        client = Client()
+        client.login(username=self.admin_user.username, password='admin_password')
+
+        response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
+        self.assertEqual(response.status_code, 302)
+
+        # get the event id and approve it
+        event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
+        response = client.post(reverse('hoo_event:approveEvent', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # remove sign up
+        response = client.post(reverse('hoo_event:removeSignUp', kwargs={'event_id': event_id}))
+        self.assertEqual(response.status_code, 302)
+
+        # check that the event is not in there
+        joined_events = Event.objects.filter(headcount__user_email__exact=self.admin_user.email)
+        self.assertFalse(joined_events)

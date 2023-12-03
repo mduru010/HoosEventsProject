@@ -1,34 +1,58 @@
 {% extends 'base.html' %}
 
+{% block additional_styles %}
+   <style>
+
+        #main-title-text {
+        font-weight: bolder;
+        background-color: black;
+        color: white;
+        border-radius: 30px;
+        padding: 15px;
+        }
+
+    </style>
+{% endblock %}
+
 {% block content %}
 {% if 'admin_users' in user_groups %}
     {% if not pending_events %}
-        <h1 class="text-center mb-5 mt-3">There are no pending events right now.</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">There are no pending events right now.</h1>
     {% else %}
-        <h1 class="text-center mb-5 mt-3">These events are awaiting approval from admins:</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">These events are awaiting approval from admins:</h1>
     {% endif %}
 {% else %}
     {% if not pending_events %}
-        <h1 class="text-center mb-5 mt-3">You have no pending events.</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">You have no pending events.</h1>
     {% else %}
-        <h1 class="text-center mb-5 mt-3">Here are your pending events:</h1>
+        <h1 class="text-center mb-5 mt-3" id="main-title-text">Here are your pending events:</h1>
     {% endif %}
 {% endif %}
 
-<div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
-{% if pending_events %}
 
-    <ul class="list-group w-75">
-        {% for event in pending_events %}
-            <li id="item-style" class="list-group-item" style="margin-bottom: 10px; text-align: center; list-style: none">
-                <a href="{% url 'hoo_event:event' event.id %}">{{ event.event_title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+{% if pending_events %}
+    <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
+        <div class="container">
+            <div class="row">
+                {% for event in pending_events %}
+                <div class="col">
+                    <div class="card" style="width: 14rem; height: 400px; margin: 0.5rem; ">
+                            {% include "emoji_dict.html" %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.event_title }}</h5>
+                            <p class="card-text">{{ event.event_description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'hoo_event:event' event.id %}" class="btn btn-primary">Event Info</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% include "pagination.html" %}
 {% endif %}
 
- </div>
-
-{% include "pagination.html" %}
 
 {% endblock %}

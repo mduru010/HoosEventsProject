@@ -17,13 +17,13 @@
 {% endblock %}
 
 {% block content %}
-<body>
-    {% if joined_events %}
+<div class="m-3">
+    {% if host_events %}
         <div id="backend-container" class="d-flex flex-column align-items-center justify-content-center">
-            <h1 class="text-center mb-5 mt-3" id="main-title-text">Here are the events that you have signed up for:</h1>
+            <h1 class="text-center mb-5 mt-3" id="main-title-text">Here are the events that you are hosting:</h1>
             <div class="container">
                 <div class="row">
-                    {% for event in joined_events %}
+                    {% for event in host_events %}
                         <div class="col">
                             <div class="card" style="width: 14rem; height: 400px; margin: 0.5rem; ">
                                 <p class="emoji" style="font-size: 5em; display: block; margin: 0 auto;">{{ event.get_event_category_display}}</p>
@@ -41,11 +41,11 @@
             </div>
         </div>
         {% include "pagination.html" %}
-        
+
     {% else %}
-        <h1 class="text-center mb-5 mt-3">You have not joined any events</h1>
-    {% endif %}
+        <h1 class="text-center mb-5 mt-3">You are not hosting any events</h1>
+    {%  endif %}
     <br><br>
-</body>
+</div>
 
 {% endblock %}
