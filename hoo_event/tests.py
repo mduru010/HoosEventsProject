@@ -290,16 +290,10 @@ class SignUpTest(unittest.TestCase):
         response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
         self.assertEqual(response.status_code, 302)
 
-        # check if this event correctly appears in pending
-        response = client.get(reverse('hoo_event:pending'))
-        self.assertIn(self.new_event["event_title"], response.content.decode())
-
         # get the event id and approve it
         event_id = Event.objects.get(event_title=self.new_event["event_title"]).id
-        response = client.post(reverse('hoo_event:approveEvent',  kwargs={'event_id' : event_id}))
-        self.assertEqual(response.status_code, 302)
 
-        # sign up
+        # sign up (no need to approve since it's automatic for admins)
         response = client.get(reverse('hoo_event:event', kwargs={'event_id': event_id}))
         self.assertIn('Sign Up', response.content.decode())
 
@@ -339,7 +333,7 @@ class SignUpTest(unittest.TestCase):
 
     def test_sign_up_pending(self):
         client = Client()
-        client.login(username=self.admin_user.username, password='admin_password')
+        client.login(username=self.regular_user.username, password='regular_password')
 
         # admin (client) creates the event
         response = client.post(reverse("hoo_event:addNewEvent"), self.new_event)
