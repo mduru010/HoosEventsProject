@@ -70,6 +70,11 @@ def addEvent(request):
             event_end_time = form.cleaned_data['event_end_time']
             event_category = form.cleaned_data['event_category']
 
+            # automatically approved if user is an admin
+            event_email = request.user.email
+            user_groups = user_group(request)
+            event_status = EventStatus.APPROVED if "admin_users" in user_groups["user_groups"] else EventStatus.PENDING
+
             # Example call: https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
 
             url = 'https://maps.googleapis.com/maps/api/geocode/json?'
@@ -107,8 +112,8 @@ def addEvent(request):
                 event_state=event_state,
                 event_start_time = event_start_time,
                 event_end_time = event_end_time,
-                event_status = EventStatus.PENDING,
-                event_email = request.user.email,
+                event_status = event_status,
+                event_email = event_email,
                 event_capacity=0,
                 event_full_capacity=event_capacity,
                 event_category = event_category
