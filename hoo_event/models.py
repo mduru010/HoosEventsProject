@@ -78,3 +78,13 @@ class HeadCount(models.Model):
 
     def __str__(self):
         return f"{self.user_email} is signed up for {self.event.event_title}"
+
+
+class DenyReasonForm(forms.Form):
+    event_deny_reason = forms.CharField(widget=forms.Textarea)
+
+
+class DenyReason(models.Model):
+    admin_email = models.CharField(max_length=100)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event_deny_reason = models.TextField()
