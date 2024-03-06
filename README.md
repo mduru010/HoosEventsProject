@@ -1,7 +1,1 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/xHnRfY9D)
-# Django Practice Assessment
-
-__Name:__
-
-__Computing ID:__
-
+This was a group project made with help of three other classmates during our time taking CS3240 (Advanced Software Development). HoosEvents is web application that allows event organizers to post events on or around campus, where users can log into the app and see the events currently happening around them. This app utilizes a Google Maps API, where users are shown a real-time map that is updated with markers that showcases event information, such as date, time, capacity, and event type. Event organizers are given the option to approve or deny registration of an atendee, and atendees can register for any events they are interested in. 
